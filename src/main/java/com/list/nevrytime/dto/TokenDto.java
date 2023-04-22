@@ -1,4 +1,4 @@
-package com.list.nevrytime.controller.dto;
+package com.list.nevrytime.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
