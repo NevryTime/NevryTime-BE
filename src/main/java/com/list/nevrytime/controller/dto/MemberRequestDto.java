@@ -13,18 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor
 public class MemberRequestDto {
 
-    private String email;
+    private String name;
     private String password;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-                .email(email)
+                .name(name)
                 .password(passwordEncoder.encode(password))
                 .authority(Authority.ROLE_USER)
                 .build();
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
-        return new UsernamePasswordAuthenticationToken(email, password);
+        return new UsernamePasswordAuthenticationToken(name, password);
     }
 }

@@ -18,8 +18,8 @@ public class MemberService {
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
 
-    public MemberResponseDto findMemberInfoByEmail(String email) {
-        return memberRepository.findByEmail(email)
+    public MemberResponseDto findMemberInfoByName(String name) {
+        return memberRepository.findByName(name)
                 .map(MemberResponseDto::of)
                 .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
     }

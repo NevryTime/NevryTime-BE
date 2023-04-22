@@ -21,8 +21,8 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findMemberInfoById(SecurityUtil.getCurrentMemberId()));
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<MemberResponseDto> findMemberInfoByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
+    @GetMapping("/{name}")
+    public ResponseEntity<MemberResponseDto> findMemberInfoByName(@PathVariable String name) {
+        return ResponseEntity.ok(memberService.findMemberInfoByName(name));
     }
 }
