@@ -1,9 +1,9 @@
 package com.list.nevrytime.service;
 
-import com.list.nevrytime.controller.dto.MemberRequestDto;
-import com.list.nevrytime.controller.dto.MemberResponseDto;
-import com.list.nevrytime.controller.dto.TokenDto;
-import com.list.nevrytime.controller.dto.TokenRequestDto;
+import com.list.nevrytime.dto.MemberRequestDto;
+import com.list.nevrytime.dto.MemberResponseDto;
+import com.list.nevrytime.dto.TokenDto;
+import com.list.nevrytime.dto.TokenRequestDto;
 import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.entity.RefreshToken;
 import com.list.nevrytime.jwt.TokenProvider;

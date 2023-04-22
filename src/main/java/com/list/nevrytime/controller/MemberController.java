@@ -1,6 +1,6 @@
 package com.list.nevrytime.controller;
 
-import com.list.nevrytime.controller.dto.MemberResponseDto;
+import com.list.nevrytime.dto.MemberResponseDto;
 import com.list.nevrytime.service.MemberService;
 import com.list.nevrytime.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
