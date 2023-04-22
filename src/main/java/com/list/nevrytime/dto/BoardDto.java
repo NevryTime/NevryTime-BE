@@ -11,4 +11,8 @@ public class BoardDto {
 
     private Long id;
     private String name;
+
+    public BoardDto(String name) {
+        this.name = name;
+    }
 }
