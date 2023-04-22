@@ -27,7 +27,7 @@ public class Content {
     private Board board;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "content_id")
     private Member member;
 
     private String title;

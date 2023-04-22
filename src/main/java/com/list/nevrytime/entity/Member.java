@@ -29,7 +29,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(mappedBy = "content",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "member",fetch = FetchType.LAZY)
     private Content content;
 
     @Builder
