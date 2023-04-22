@@ -1,6 +1,6 @@
 package com.list.nevrytime.jwt;
 
-import com.list.nevrytime.controller.dto.TokenDto;
+import com.list.nevrytime.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
