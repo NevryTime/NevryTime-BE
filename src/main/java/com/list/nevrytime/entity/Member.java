@@ -29,6 +29,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @OneToOne(mappedBy = "content",fetch = FetchType.LAZY)
+    private Content content;
+
     @Builder
     public Member(String name, String password, Authority authority) {
         this.name = name;

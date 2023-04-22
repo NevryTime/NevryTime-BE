@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "board")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Setter
 public class Board {
@@ -25,6 +25,6 @@ public class Board {
     @Column(name = "board_name")
     private String name;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
 }
