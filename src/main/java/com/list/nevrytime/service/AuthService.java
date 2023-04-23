@@ -89,4 +89,14 @@ public class AuthService {
         // 토큰 발급
         return tokenDto;
     }
+
+    @Transactional
+    public boolean logout(TokenRequestDto tokenRequestDto) {
+        if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        } else {
+            refreshTokenRepository.deleteById(refreshTokenRepository.findRefreshTokenByValue(tokenRequestDto.getRefreshToken()));
+            return true;
+        }
+    }
 }
