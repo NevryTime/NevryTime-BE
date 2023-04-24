@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BoardDto {
 
     @Getter
@@ -33,5 +36,14 @@ public class BoardDto {
         public static BoardResponseDto of(Board board) {
             return new BoardResponseDto(board.getId(), board.getName(), board.getBoardType());
         }
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BoardListResponseDto {
+        private boolean success;
+        private List<BoardResponseDto> boardList = new ArrayList<>();
     }
 }
