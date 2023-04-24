@@ -1,9 +1,9 @@
 package com.list.nevrytime.service;
 
-import com.list.nevrytime.dto.MemberRequestDto;
-import com.list.nevrytime.dto.MemberResponseDto;
+
+import com.list.nevrytime.dto.MemberDto;
 import com.list.nevrytime.dto.TokenDto;
-import com.list.nevrytime.dto.TokenRequestDto;
+import com.list.nevrytime.dto.TokenDto.TokenRequestDto;
 import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.entity.RefreshToken;
 import com.list.nevrytime.jwt.TokenProvider;
@@ -16,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.list.nevrytime.dto.MemberDto.*;
+import static com.list.nevrytime.dto.TokenDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +40,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto login(MemberRequestDto memberRequestDto) {
+    public TokenResponseDto login(MemberRequestDto memberRequestDto) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
         UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
 
@@ -46,22 +49,22 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenResponseDto tokenResponseDto = tokenProvider.generateTokenDto(authentication);
 
         // 4. RefreshToken 저장
         RefreshToken refreshToken = RefreshToken.builder()
                 .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
+                .value(tokenResponseDto.getRefreshToken())
                 .build();
 
         refreshTokenRepository.save(refreshToken);
 
         // 5. 토큰 발급
-        return tokenDto;
+        return tokenResponseDto;
     }
 
     @Transactional
-    public TokenDto reissue(TokenRequestDto tokenRequestDto) {
+    public TokenResponseDto reissue(TokenRequestDto tokenRequestDto) {
         // 1. Refresh Token 검증
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
@@ -80,14 +83,14 @@ public class AuthService {
         }
 
         // 5. 새로운 토큰 생성
-        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
+        TokenResponseDto tokenResponseDto = tokenProvider.generateTokenDto(authentication);
 
         // 6. 저장소 정보 업데이트
-        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenResponseDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
         // 토큰 발급
-        return tokenDto;
+        return tokenResponseDto;
     }
 
     @Transactional

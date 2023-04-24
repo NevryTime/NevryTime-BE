@@ -1,6 +1,6 @@
 package com.list.nevrytime.controller;
 
-import com.list.nevrytime.dto.MemberResponseDto;
+import com.list.nevrytime.dto.MemberDto;
 import com.list.nevrytime.service.MemberService;
 import com.list.nevrytime.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.list.nevrytime.dto.MemberDto.*;
 
 @RestController
 @RequiredArgsConstructor

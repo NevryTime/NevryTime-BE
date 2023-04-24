@@ -1,10 +1,11 @@
 package com.list.nevrytime.service;
 
-import com.list.nevrytime.dto.MemberResponseDto;
 import com.list.nevrytime.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.list.nevrytime.dto.MemberDto.*;
 
 @Service
 @RequiredArgsConstructor
