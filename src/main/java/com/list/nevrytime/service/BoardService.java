@@ -17,12 +17,16 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public BoardResponseDto createBoard(String boardName) {
-        if (boardRepository.existsByName(boardName)) {
+    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto) {
+        if (boardRepository.existsByName(boardRequestDto.getName())) {
             throw new RuntimeException("이미 존재하는 게시판입니다");
         }
-        Board board = new Board();
-        board.setName(boardName);
+
+        Board board = Board.builder()
+                .name(boardRequestDto.getName())
+                .boardType(boardRequestDto.getBoardType())
+                .build();
+
         return BoardResponseDto.of(boardRepository.save(board));
     }
 
