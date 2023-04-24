@@ -1,5 +1,6 @@
 package com.list.nevrytime.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,8 +30,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
-    @OneToOne(mappedBy = "member",fetch = FetchType.LAZY)
-    private Content content;
+//    @JsonIgnore
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "member_id")
+//    private Content content;
 
     @Builder
     public Member(String name, String password, Authority authority) {

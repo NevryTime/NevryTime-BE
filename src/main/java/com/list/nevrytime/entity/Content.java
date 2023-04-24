@@ -1,5 +1,6 @@
 package com.list.nevrytime.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -15,6 +16,8 @@ import java.util.List;
 @Setter
 @DynamicInsert
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Content {
 
     @Id
@@ -22,23 +25,26 @@ public class Content {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "content_id")
+    @JsonIgnore
+//    @OneToOne(mappedBy = "member_id",fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 
     private String title;
     private String content;
     private LocalDateTime createAt;
 
-    @ColumnDefault(value = "0")
+    @ColumnDefault("0")
     private int likes;
-    @ColumnDefault(value = "false")
+    @ColumnDefault("false")
     private boolean isImage;
-    @ColumnDefault(value = "false")
+    @ColumnDefault("false")
     private boolean isShow;
 
     public void changeBoard(Board board) {
