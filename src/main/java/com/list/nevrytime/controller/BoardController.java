@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.list.nevrytime.dto.BoardDto.*;
 
 @RestController
@@ -15,9 +17,14 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @GetMapping("/")
+    public ResponseEntity<BoardListResponseDto> findAllBoard() {
+        return ResponseEntity.ok(new BoardListResponseDto(true,boardService.findAllBoard()));
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardResponseDto boardResponseDto) {
-        return ResponseEntity.ok(boardService.createBoard(boardResponseDto.getName()));
+    public ResponseEntity<BoardResponseDto> createBoard(@RequestBody BoardRequestDto boardRequestDto) {
+        return ResponseEntity.ok(boardService.createBoard(boardRequestDto));
     }
 
     @PostMapping("/{name}")

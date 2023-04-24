@@ -4,8 +4,12 @@ import com.list.nevrytime.dto.BoardDto;
 import com.list.nevrytime.entity.Board;
 import com.list.nevrytime.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.BoardDto.*;
 
@@ -14,7 +18,19 @@ import static com.list.nevrytime.dto.BoardDto.*;
 @Transactional(readOnly = true)
 public class BoardService {
 
+    private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
+
+    @Transactional
+    public List<BoardResponseDto> findAllBoard() {
+        List<Board> boards = boardRepository.findAll();
+        List<BoardResponseDto> resultList = boards
+                .stream()
+                .map(post -> modelMapper.map(post, BoardResponseDto.class))
+                .collect(Collectors.toList());
+        return resultList;
+
+    }
 
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto) {
