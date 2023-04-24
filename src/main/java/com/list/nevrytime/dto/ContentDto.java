@@ -9,6 +9,8 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContentDto {
 
@@ -48,6 +50,23 @@ public class ContentDto {
         private boolean isImage;
         @Nullable
         private boolean isShow;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContentListResponseDto {
+        private boolean success;
+        private List<ContentResponseDto> boardList = new ArrayList<>();
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContentDeleteResponseDto {
+        private boolean success;
     }
 
 }
