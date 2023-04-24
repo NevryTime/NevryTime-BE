@@ -1,10 +1,7 @@
 package com.list.nevrytime.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.engine.profile.Fetch;
 
 import javax.persistence.*;
@@ -14,8 +11,10 @@ import java.util.List;
 @Entity
 @Table(name = "board")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Board {
 
     @Id

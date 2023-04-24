@@ -23,17 +23,10 @@ public class Member {
 
     private String nickName;
 
-//    private String email;
-
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
-
-//    @JsonIgnore
-//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "member_id")
-//    private Content content;
 
     @Builder
     public Member(String name, String password, Authority authority) {
