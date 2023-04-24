@@ -1,9 +1,8 @@
 package com.list.nevrytime.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +13,8 @@ import java.util.List;
 @Table(name = "content")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@NoArgsConstructor
 public class Content {
 
     @Id
@@ -32,13 +32,14 @@ public class Content {
 
     private String title;
     private String content;
-
-    private int likes;
     private LocalDateTime createAt;
-    private boolean isContent;
+
+    @ColumnDefault(value = "0")
+    private int likes;
+    @ColumnDefault(value = "false")
+    private boolean isImage;
+    @ColumnDefault(value = "false")
     private boolean isShow;
-
-
 
     public void changeBoard(Board board) {
         this.board = board;
