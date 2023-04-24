@@ -13,7 +13,7 @@ public class BoardDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class BoardRequestDto{
-        private Long id;
+
         private String name;
 
     }
