@@ -30,4 +30,7 @@ public class Board {
     @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 }
