@@ -22,7 +22,7 @@ public class TokenDto {
 
     @Getter
     @NoArgsConstructor
-    public class TokenRequestDto {
+    public static class TokenRequestDto {
         private String accessToken;
         private String refreshToken;
     }
