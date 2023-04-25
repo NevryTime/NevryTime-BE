@@ -1,14 +1,14 @@
 package com.list.nevrytime.service;
 
-import com.list.nevrytime.dto.BoardDto;
-import com.list.nevrytime.dto.ContentDto;
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
 import com.list.nevrytime.entity.Board;
 import com.list.nevrytime.entity.Content;
 import com.list.nevrytime.entity.Member;
+import com.list.nevrytime.jwt.TokenProvider;
 import com.list.nevrytime.repository.BoardRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
+import com.list.nevrytime.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,7 @@ import static com.list.nevrytime.dto.ContentDto.*;
 @Transactional(readOnly = true)
 public class ContentService {
 
+    private final TokenProvider tokenProvider;
     private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
@@ -63,9 +64,9 @@ public class ContentService {
 
     @Transactional
     public ContentDeleteResponseDto deleteContentByName(Long contentId) {
+        Content content = contentRepository.findContentByMember_IdAndId(SecurityUtil.getCurrentMemberId(), contentId).orElseThrow(
+                () -> new RuntimeException("게시판이 존재하지 않습니다."));
         contentRepository.deleteById(contentId);
-        ContentDeleteResponseDto contentDeleteResponseDto = new ContentDeleteResponseDto();
-        contentDeleteResponseDto.setSuccess(true);
-        return contentDeleteResponseDto;
+        return new ContentDeleteResponseDto(true);
     }
 }
