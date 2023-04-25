@@ -11,6 +11,9 @@ import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,5 +71,14 @@ public class ContentService {
                 () -> new RuntimeException("게시판이 존재하지 않습니다."));
         contentRepository.deleteById(contentId);
         return new ContentDeleteResponseDto(true);
+    }
+
+    @Transactional
+    public ContentPageResponseDto pageContent(Long boardId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
+        Page<Content> pageContent = contentRepository.findByBoardId(boardId, pageRequest);
+        Page<ContentResponseDto> toMap = pageContent.map(
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
+        return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
 }

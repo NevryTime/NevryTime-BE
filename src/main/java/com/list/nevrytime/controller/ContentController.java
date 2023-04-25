@@ -29,4 +29,9 @@ public class ContentController {
     public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateRequestDto contentCreateRequestDto) {
         return ResponseEntity.ok(contentService.createContent(contentCreateRequestDto));
     }
+
+    @GetMapping("/{boardId}/{page}")
+    public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page) {
+        return ResponseEntity.ok(contentService.pageContent(boardId, page));
+    }
 }
