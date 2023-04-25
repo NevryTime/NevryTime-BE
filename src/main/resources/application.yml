@@ -17,7 +17,7 @@ spring:
 #    database-platform: org.hibernate.dialect.H2Dialect
 #    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
