@@ -25,13 +25,18 @@ public class ContentController {
         return ResponseEntity.ok(contentService.deleteContentByName(contentId));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateRequestDto contentCreateRequestDto) {
-        return ResponseEntity.ok(contentService.createContent(contentCreateRequestDto));
+    @PutMapping("/{contentId}")
+    public ResponseEntity<ContentUpdateResponseDto> updateContent(@PathVariable Long contentId, @RequestBody ContentUpdateRequestDto contentUpdateRequestDto) {
+        return ResponseEntity.ok(contentService.update(contentId, contentUpdateRequestDto));
     }
 
     @GetMapping("/{boardId}/{page}")
     public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page) {
         return ResponseEntity.ok(contentService.pageContent(boardId, page));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateRequestDto contentCreateRequestDto) {
+        return ResponseEntity.ok(contentService.createContent(contentCreateRequestDto));
     }
 }

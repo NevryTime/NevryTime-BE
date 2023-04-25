@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.ContentDto.*;
@@ -71,6 +72,26 @@ public class ContentService {
                 () -> new RuntimeException("게시판이 존재하지 않습니다."));
         contentRepository.deleteById(contentId);
         return new ContentDeleteResponseDto(true);
+    }
+
+    @Transactional
+    public ContentUpdateResponseDto update(Long contentId, ContentUpdateRequestDto contentUpdateRequestDto) {
+        Content findContent = contentRepository.findById(contentId)
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+
+        Content content = Content.builder()
+                .id(findContent.getId())
+                .board(findContent.getBoard())
+                .member(findContent.getMember())
+                .title(contentUpdateRequestDto.getTitle())
+                .content(contentUpdateRequestDto.getContent())
+                .isImage(contentUpdateRequestDto.getIsImage())
+                .isShow(contentUpdateRequestDto.getIsShow())
+                .likes(findContent.getLikes())
+                .createAt(LocalDateTime.now())
+                .build();
+
+        return new ContentUpdateResponseDto(true ,ContentResponseDto.of(contentRepository.save(content)));
     }
 
     @Transactional

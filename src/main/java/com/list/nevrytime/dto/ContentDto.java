@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ContentDto {
 
@@ -21,8 +22,6 @@ public class ContentDto {
     public static class ContentResponseDto {
 
         private Long id;
-//        private Board board;
-//        private Member member;
         private String boardName;
         private String memberName;
         private String title;
@@ -69,6 +68,28 @@ public class ContentDto {
     @NoArgsConstructor
     public static class ContentDeleteResponseDto {
         private boolean success;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContentUpdateRequestDto {
+
+        private String title;
+        private String content;
+        private Boolean isImage;
+        private Boolean isShow;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContentUpdateResponseDto {
+
+        private boolean success;
+        private ContentResponseDto contentResponseDto;
     }
 
     @Getter
