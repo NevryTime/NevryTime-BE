@@ -36,8 +36,8 @@ public class ContentController {
     }
 
     @GetMapping("/{boardId}/{page}")
-    public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page) {
-        return ResponseEntity.ok(contentService.pageContent(boardId, page));
+    public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page, @RequestBody int length) {
+        return ResponseEntity.ok(contentService.pageContent(boardId, page, length));
     }
 
     @PostMapping("/create")

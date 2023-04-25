@@ -101,8 +101,8 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentPageResponseDto pageContent(Long boardId, int page) {
-        PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
+    public ContentPageResponseDto pageContent(Long boardId, int page, int length) {
+        PageRequest pageRequest = PageRequest.of(page, length, Sort.Direction.DESC, "CreateAt");
         Page<Content> pageContent = contentRepository.findByBoardId(boardId, pageRequest);
         Page<ContentResponseDto> toMap = pageContent.map(
                 content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
