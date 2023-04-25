@@ -57,6 +57,12 @@ public class ContentService {
     }
 
     @Transactional
+    public ContentResponseDto findContentById(Long contentId) {
+        return ContentResponseDto.of(contentRepository.findById(contentId)
+                .orElseThrow(() -> new RuntimeException("게시판이 존재하지 않습니다.")));
+    }
+
+    @Transactional
     public List<ContentResponseDto> findAllContent() {
         List<Content> contents = contentRepository.findAll();
         List<ContentResponseDto> resultList = contents

@@ -20,6 +20,11 @@ public class ContentController {
         return ResponseEntity.ok(new ContentListResponseDto(true,contentService.findAllContent()));
     }
 
+    @GetMapping("/{contentId}")
+    public ResponseEntity<ContentResponseDto> findContentById(@PathVariable Long contentId) {
+        return ResponseEntity.ok(contentService.findContentById(contentId));
+    }
+
     @DeleteMapping("/{contentId}")
     public ResponseEntity<ContentDeleteResponseDto> deleteContentByName(@PathVariable Long contentId ) {
         return ResponseEntity.ok(contentService.deleteContentByName(contentId));
