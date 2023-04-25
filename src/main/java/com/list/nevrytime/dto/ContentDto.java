@@ -71,4 +71,16 @@ public class ContentDto {
         private boolean success;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ContentPageResponseDto {
+        private boolean success;
+        private List<ContentResponseDto> contentPage;
+        private int contentTotalPages;
+        private Long contentTotalElements;
+    }
+
+
 }
