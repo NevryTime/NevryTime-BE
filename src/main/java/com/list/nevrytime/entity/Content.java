@@ -31,8 +31,7 @@ public class Content {
     private Board board;
 
     @JsonIgnore
-//    @OneToOne(mappedBy = "member_id",fetch = FetchType.LAZY)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
