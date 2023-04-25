@@ -44,4 +44,9 @@ public class ContentController {
     public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateRequestDto contentCreateRequestDto) {
         return ResponseEntity.ok(contentService.createContent(contentCreateRequestDto));
     }
+
+    @GetMapping("/popular")
+    public ResponseEntity<ContentListResponseDto> liveBestContent() {
+        return ResponseEntity.ok(new ContentListResponseDto(true, contentService.popularContent()));
+    }
 }

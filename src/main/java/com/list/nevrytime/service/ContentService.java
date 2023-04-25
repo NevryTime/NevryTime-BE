@@ -108,4 +108,14 @@ public class ContentService {
                 content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
+
+    @Transactional
+    public List<ContentResponseDto> popularContent() {
+        List<Content> contents = contentRepository.findTop2ByOrderByLikesDescContentDesc();
+        List<ContentResponseDto> resultList = contents
+                .stream()
+                .map(list -> modelMapper.map(list, ContentResponseDto.class))
+                .collect(Collectors.toList());
+        return resultList;
+    }
 }

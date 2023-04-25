@@ -1,17 +1,13 @@
 package com.list.nevrytime.dto;
 
-import com.list.nevrytime.entity.Board;
 import com.list.nevrytime.entity.Content;
-import com.list.nevrytime.entity.Member;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ContentDto {
 
@@ -59,7 +55,7 @@ public class ContentDto {
     @NoArgsConstructor
     public static class ContentListResponseDto {
         private boolean success;
-        private List<ContentResponseDto> boardList = new ArrayList<>();
+        private List<ContentResponseDto> contentList = new ArrayList<>();
     }
 
     @Getter
