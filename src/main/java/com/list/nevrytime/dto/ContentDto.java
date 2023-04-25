@@ -21,8 +21,10 @@ public class ContentDto {
     public static class ContentResponseDto {
 
         private Long id;
+//        private Board board;
+//        private Member member;
         private String boardName;
-        private String userName;
+        private String memberName;
         private String title;
         private String content;
         private int likes;
