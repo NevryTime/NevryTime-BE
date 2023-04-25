@@ -118,4 +118,33 @@ public class ContentService {
                 .collect(Collectors.toList());
         return resultList;
     }
+
+    @Transactional
+    public ContentPageResponseDto hotContent(int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
+        Page<Content> contents = contentRepository.findByLikesGreaterThanOrderByCreateAtDesc(9, pageRequest);
+        Page<ContentResponseDto> toMap = contents.map(
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
+        return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
+    }
+
+    @Transactional
+    public List<ContentResponseDto> hotListContent() {
+        List<Content> contents = contentRepository.findTop4ByLikesGreaterThanOrderByCreateAtDesc(9);
+        List<ContentResponseDto> resultList = contents
+                .stream()
+                .map(list -> modelMapper.map(list, ContentResponseDto.class))
+                .collect(Collectors.toList());
+        return resultList;
+    }
+
+    @Transactional
+    public ContentPageResponseDto bestContent(int page) {
+        PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
+        Page<Content> contents = contentRepository.findByLikesGreaterThanOrderByCreateAtDesc(99, pageRequest);
+        Page<ContentResponseDto> toMap = contents.map(
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
+        return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
+    }
 }

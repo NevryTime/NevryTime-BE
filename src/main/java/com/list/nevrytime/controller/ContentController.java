@@ -35,7 +35,7 @@ public class ContentController {
         return ResponseEntity.ok(contentService.update(contentId, contentUpdateRequestDto));
     }
 
-    @GetMapping("/{boardId}/{page}")
+    @GetMapping("/{boardId}/p/{page}")
     public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page, @RequestBody int length) {
         return ResponseEntity.ok(contentService.pageContent(boardId, page, length));
     }
@@ -48,5 +48,20 @@ public class ContentController {
     @GetMapping("/popular")
     public ResponseEntity<ContentListResponseDto> liveBestContent() {
         return ResponseEntity.ok(new ContentListResponseDto(true, contentService.popularContent()));
+    }
+
+    @GetMapping("/hot/p/{page}")
+    public ResponseEntity<ContentPageResponseDto> hotContent(@PathVariable int page) {
+        return ResponseEntity.ok(contentService.hotContent(page));
+    }
+
+    @GetMapping("/hot4")
+    public ResponseEntity<ContentListResponseDto> hotListContent() {
+        return ResponseEntity.ok(new ContentListResponseDto(true, contentService.hotListContent()));
+    }
+
+    @GetMapping("/best/p/{page}")
+    public ResponseEntity<ContentPageResponseDto> bestContent(@PathVariable int page) {
+        return ResponseEntity.ok(contentService.bestContent(page));
     }
 }
