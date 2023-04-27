@@ -26,5 +26,13 @@ public class TokenDto {
         private String accessToken;
         private String refreshToken;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class TokenDeleteDto {
+        private boolean success;
+    }
 }
 
