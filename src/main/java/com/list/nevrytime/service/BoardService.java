@@ -2,9 +2,11 @@ package com.list.nevrytime.service;
 
 import com.list.nevrytime.dto.BoardDto;
 import com.list.nevrytime.entity.Board;
+import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,7 @@ public class BoardService {
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto boardRequestDto) {
         if (boardRepository.existsByName(boardRequestDto.getName())) {
-            throw new RuntimeException("이미 존재하는 게시판입니다");
+            throw new CustomException(HttpStatus.BAD_REQUEST, "이미 존재하는 게시판입니다");
         }
 
         Board board = Board.builder()
@@ -49,6 +51,6 @@ public class BoardService {
     public BoardResponseDto findBoardInfoByName(String name) {
         return boardRepository.findByName(name)
                 .map(BoardResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("게시판 정보가 없습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판 정보가 없습니다."));
     }
 }

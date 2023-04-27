@@ -2,6 +2,7 @@ package com.list.nevrytime.service;
 
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
 import com.list.nevrytime.entity.*;
+import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.BoardRepository;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +41,10 @@ public class ContentService {
     @Transactional
     public ContentResponseDto createContent(ContentCreateRequestDto contentCreateRequestDto) {
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
-                () -> new RuntimeException("boardId가 유효하지 않습니다."));
+                () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
 
         Member member = memberRepository.findById(contentCreateRequestDto.getMemberId()).orElseThrow(
-                () -> new RuntimeException("memberId가 유효하지 않습니다."));
+                () -> new CustomException(HttpStatus.BAD_REQUEST, "memberId가 유효하지 않습니다."));
 
         Content content = Content.builder()
                 .board(board)
@@ -60,7 +62,7 @@ public class ContentService {
     @Transactional
     public ContentWithCommentResponseDto findContentById(Long contentId) {
         ContentResponseDto contentResponseDto = ContentResponseDto.of(contentRepository.findById(contentId)
-                .orElseThrow(() -> new RuntimeException("게시판이 존재하지 않습니다.")));
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다.")));
 
         QComment qComment = new QComment("comment");
 
@@ -97,7 +99,7 @@ public class ContentService {
     @Transactional
     public ContentDeleteResponseDto deleteContentByName(Long contentId) {
         Content content = contentRepository.findContentByMember_IdAndId(SecurityUtil.getCurrentMemberId(), contentId).orElseThrow(
-                () -> new RuntimeException("게시판이 존재하지 않습니다."));
+                () -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
         contentRepository.deleteById(contentId);
         return new ContentDeleteResponseDto(true);
     }
@@ -105,7 +107,7 @@ public class ContentService {
     @Transactional
     public ContentUpdateResponseDto update(Long contentId, ContentUpdateRequestDto contentUpdateRequestDto) {
         Content findContent = contentRepository.findById(contentId)
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시글이 존재하지 않습니다."));
 
         Content content = Content.builder()
                 .id(findContent.getId())
