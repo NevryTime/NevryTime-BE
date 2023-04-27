@@ -1,8 +1,7 @@
 package com.list.nevrytime.controller;
 
-import com.list.nevrytime.dto.MemberDto;
 import com.list.nevrytime.service.MemberService;
-import com.list.nevrytime.util.SecurityUtil;
+import com.list.nevrytime.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

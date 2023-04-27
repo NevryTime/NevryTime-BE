@@ -1,4 +1,4 @@
-package com.list.nevrytime.jwt;
+package com.list.nevrytime.security.jwt;
 
 import com.list.nevrytime.dto.TokenDto;
 import io.jsonwebtoken.*;

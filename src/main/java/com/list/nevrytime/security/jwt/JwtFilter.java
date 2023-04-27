@@ -1,4 +1,4 @@
-package com.list.nevrytime.jwt;
+package com.list.nevrytime.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

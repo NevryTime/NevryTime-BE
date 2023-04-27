@@ -1,8 +1,8 @@
 package com.list.nevrytime.config;
 
-import com.list.nevrytime.jwt.JwtAccessDeniedHandler;
-import com.list.nevrytime.jwt.JwtAuthenticationEntryPoint;
-import com.list.nevrytime.jwt.TokenProvider;
+import com.list.nevrytime.security.jwt.JwtAccessDeniedHandler;
+import com.list.nevrytime.security.jwt.JwtAuthenticationEntryPoint;
+import com.list.nevrytime.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

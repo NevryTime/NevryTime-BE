@@ -1,12 +1,10 @@
 package com.list.nevrytime.service;
 
 
-import com.list.nevrytime.dto.MemberDto;
-import com.list.nevrytime.dto.TokenDto;
 import com.list.nevrytime.dto.TokenDto.TokenRequestDto;
 import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.entity.RefreshToken;
-import com.list.nevrytime.jwt.TokenProvider;
+import com.list.nevrytime.security.jwt.TokenProvider;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;

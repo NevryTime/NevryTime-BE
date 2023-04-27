@@ -1,15 +1,12 @@
 package com.list.nevrytime.service;
 
-import com.list.nevrytime.dto.CommentDto;
-import com.list.nevrytime.dto.ContentDto;
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
 import com.list.nevrytime.entity.*;
-import com.list.nevrytime.jwt.TokenProvider;
 import com.list.nevrytime.repository.BoardRepository;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
-import com.list.nevrytime.util.SecurityUtil;
+import com.list.nevrytime.security.util.SecurityUtil;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.CommentDto.*;

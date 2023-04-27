@@ -6,7 +6,7 @@ import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
-import com.list.nevrytime.util.SecurityUtil;
+import com.list.nevrytime.security.util.SecurityUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

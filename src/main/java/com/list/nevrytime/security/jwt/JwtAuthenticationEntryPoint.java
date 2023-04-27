@@ -1,4 +1,4 @@
-package com.list.nevrytime.jwt;
+package com.list.nevrytime.security.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

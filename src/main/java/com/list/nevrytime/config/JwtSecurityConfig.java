@@ -1,7 +1,7 @@
 package com.list.nevrytime.config;
 
-import com.list.nevrytime.jwt.JwtFilter;
-import com.list.nevrytime.jwt.TokenProvider;
+import com.list.nevrytime.security.jwt.JwtFilter;
+import com.list.nevrytime.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
