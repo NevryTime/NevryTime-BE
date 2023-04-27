@@ -32,7 +32,7 @@ public class AuthService {
     @Transactional
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
         if (memberRepository.existsByName(memberRequestDto.getName())) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
+            throw new CustomException(HttpStatus.BAD_REQUEST, "이미 가입되어 있는 유저입니다");
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -94,12 +94,16 @@ public class AuthService {
     }
 
     @Transactional
-    public boolean logout(TokenRequestDto tokenRequestDto) {
+    public TokenDeleteDto logout(TokenRequestDto tokenRequestDto) {
+        // 1. Refresh Token 검증
         if (!tokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "Refresh Token 이 유효하지 않습니다.");
-        } else {
-            refreshTokenRepository.deleteById(refreshTokenRepository.findRefreshTokenByValue(tokenRequestDto.getRefreshToken()));
-            return true;
         }
+
+        // 2. Access Token 에서 Member ID 가져오기
+        Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        refreshTokenRepository.deleteByKey(authentication.getName());
+        return new TokenDeleteDto(true);
     }
 }
