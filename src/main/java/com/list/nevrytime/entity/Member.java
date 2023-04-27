@@ -5,13 +5,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -37,6 +33,10 @@ public class Member{
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
+
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+//    private Comment comment;
 
     @Builder
     public Member(String name, String password, Authority authority) {
