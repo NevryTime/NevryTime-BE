@@ -7,6 +7,7 @@ import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.repository.ScrapRepository;
+import com.list.nevrytime.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,8 @@ public class ScrapService {
     @Transactional
     public ScrapResponseDto insert(ScrapRequestDto scrapRequestDto) {
 
-        Member member = memberRepository.findById(scrapRequestDto.getMemberId())
-                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "유저가 존재하지 않습니다."));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = contentRepository.findById(scrapRequestDto.getContentId())
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시글이 존재하지 않습니다."));
@@ -49,8 +50,8 @@ public class ScrapService {
     @Transactional
     public ScrapDeleteResponseDto delete(ScrapRequestDto scrapRequestDto) {
 
-        Member member = memberRepository.findById(scrapRequestDto.getMemberId())
-                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "유저가 존재하지 않습니다."));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = contentRepository.findById(scrapRequestDto.getContentId())
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시글이 존재하지 않습니다."));

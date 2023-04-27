@@ -13,7 +13,6 @@ public class HeartDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class HeartRequestDto {
-        private Long memberId;
         private Long contentId;
     }
 

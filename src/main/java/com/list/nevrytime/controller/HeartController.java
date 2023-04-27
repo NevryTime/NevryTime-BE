@@ -17,12 +17,12 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping("/")
-    public ResponseEntity<HeartResponseDto> insert(@RequestBody @Valid HeartRequestDto heartRequestDto) {
+    public ResponseEntity<HeartResponseDto> insert(@RequestBody HeartRequestDto heartRequestDto) {
         return ResponseEntity.ok(heartService.insert(heartRequestDto));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<HeartDeleteResponseDto> delete(@RequestBody @Valid HeartRequestDto heartRequestDto) {
+    public ResponseEntity<HeartDeleteResponseDto> delete(@RequestBody HeartRequestDto heartRequestDto) {
         return ResponseEntity.ok(heartService.delete(heartRequestDto));
     }
 

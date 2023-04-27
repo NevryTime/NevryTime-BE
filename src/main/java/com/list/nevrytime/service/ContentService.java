@@ -43,8 +43,8 @@ public class ContentService {
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
 
-        Member member = memberRepository.findById(contentCreateRequestDto.getMemberId()).orElseThrow(
-                () -> new CustomException(HttpStatus.BAD_REQUEST, "memberId가 유효하지 않습니다."));
+        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(
+                () -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = Content.builder()
                 .board(board)

@@ -13,7 +13,6 @@ public class ScrapDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ScrapRequestDto {
-        private Long memberId;
         private Long contentId;
     }
 

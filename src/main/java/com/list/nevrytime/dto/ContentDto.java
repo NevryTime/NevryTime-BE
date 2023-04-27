@@ -54,7 +54,6 @@ public class ContentDto {
         private String title;
         private String content;
         private Long boardId;
-        private Long memberId;
         @Nullable
         private boolean isImage;
         @Nullable
