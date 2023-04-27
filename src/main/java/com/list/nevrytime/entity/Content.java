@@ -31,7 +31,7 @@ public class Content {
     private Board board;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -40,11 +40,19 @@ public class Content {
     private LocalDateTime createAt;
 
     @ColumnDefault("0")
+    private int commentCount;
+    @ColumnDefault("0")
+    private int hearts;
+    @ColumnDefault("0")
     private int likes;
     @ColumnDefault("false")
     private boolean isImage;
     @ColumnDefault("false")
     private boolean isShow;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    List<Comment> comments = new ArrayList<>();
 
     public void changeBoard(Board board) {
         this.board = board;

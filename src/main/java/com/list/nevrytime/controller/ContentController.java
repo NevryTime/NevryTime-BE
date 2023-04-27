@@ -21,7 +21,7 @@ public class ContentController {
     }
 
     @GetMapping("/{contentId}")
-    public ResponseEntity<ContentResponseDto> findContentById(@PathVariable Long contentId) {
+    public ResponseEntity<ContentWithCommentResponseDto> findContentById(@PathVariable Long contentId) {
         return ResponseEntity.ok(contentService.findContentById(contentId));
     }
 

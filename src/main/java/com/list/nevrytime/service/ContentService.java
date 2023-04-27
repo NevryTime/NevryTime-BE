@@ -1,14 +1,17 @@
 package com.list.nevrytime.service;
 
+import com.list.nevrytime.dto.CommentDto;
+import com.list.nevrytime.dto.ContentDto;
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
-import com.list.nevrytime.entity.Board;
-import com.list.nevrytime.entity.Content;
-import com.list.nevrytime.entity.Member;
+import com.list.nevrytime.entity.*;
 import com.list.nevrytime.jwt.TokenProvider;
 import com.list.nevrytime.repository.BoardRepository;
+import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.util.SecurityUtil;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.list.nevrytime.dto.CommentDto.*;
 import static com.list.nevrytime.dto.ContentDto.*;
 
 @Service
@@ -29,11 +33,12 @@ import static com.list.nevrytime.dto.ContentDto.*;
 @Transactional(readOnly = true)
 public class ContentService {
 
-    private final TokenProvider tokenProvider;
+    private final JPAQueryFactory jpaQueryFactory;
     private final ModelMapper modelMapper;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public ContentResponseDto createContent(ContentCreateRequestDto contentCreateRequestDto) {
@@ -57,9 +62,36 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentResponseDto findContentById(Long contentId) {
-        return ContentResponseDto.of(contentRepository.findById(contentId)
+    public ContentWithCommentResponseDto findContentById(Long contentId) {
+        ContentResponseDto contentResponseDto = ContentResponseDto.of(contentRepository.findById(contentId)
                 .orElseThrow(() -> new RuntimeException("게시판이 존재하지 않습니다.")));
+
+        QComment qComment = new QComment("comment");
+
+        List<CommentResponseDto> commentResponseDtos = jpaQueryFactory
+                .select(Projections.constructor(
+                        CommentResponseDto.class,
+                        qComment.id.as("id"),
+                        qComment.content.id.as("contentId"),
+                        qComment.member.id.as("memberId"),
+                        qComment.commentContent.as("commentContent"),
+                        qComment.parentId.as("parentId"),
+                        qComment.depth.as("depth"),
+                        qComment.createAt.as("createAt")
+                ))
+                .from(qComment)
+                .innerJoin(qComment.content)
+                .where(qComment.content.id.eq(contentId))
+                .orderBy(qComment.id.desc())
+                .fetch();
+
+//        List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
+//        List<CommentResponseDto> resultList = comments
+//                .stream()
+//                .map(list -> modelMapper.map(list, CommentResponseDto.class))
+//                .collect(Collectors.toList());
+
+        return new ContentWithCommentResponseDto(contentResponseDto,commentResponseDtos);
     }
 
     @Transactional
@@ -97,16 +129,14 @@ public class ContentService {
                 .createAt(LocalDateTime.now())
                 .build();
 
-        return new ContentUpdateResponseDto(true ,ContentResponseDto.of(contentRepository.save(content)));
+        return new ContentUpdateResponseDto(true, ContentResponseDto.of(contentRepository.save(content)));
     }
 
     @Transactional
     public ContentPageResponseDto pageContent(Long boardId, int page, int length) {
         PageRequest pageRequest = PageRequest.of(page, length, Sort.Direction.DESC, "CreateAt");
         Page<Content> pageContent = contentRepository.findByBoardId(boardId, pageRequest);
-        Page<ContentResponseDto> toMap = pageContent.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
-        return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
+        return getContentPageResponseDto(pageContent);
     }
 
     @Transactional
@@ -124,9 +154,7 @@ public class ContentService {
 
         PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
         Page<Content> contents = contentRepository.findByLikesGreaterThanOrderByCreateAtDesc(9, pageRequest);
-        Page<ContentResponseDto> toMap = contents.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
-        return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
+        return getContentPageResponseDto(contents);
     }
 
     @Transactional
@@ -143,8 +171,12 @@ public class ContentService {
     public ContentPageResponseDto bestContent(int page) {
         PageRequest pageRequest = PageRequest.of(page, 20, Sort.Direction.DESC, "CreateAt");
         Page<Content> contents = contentRepository.findByLikesGreaterThanOrderByCreateAtDesc(99, pageRequest);
+        return getContentPageResponseDto(contents);
+    }
+
+    private ContentPageResponseDto getContentPageResponseDto(Page<Content> contents) {
         Page<ContentResponseDto> toMap = contents.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getLikes(), content.getCreateAt(),content.isImage(), content.isShow()));
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getHearts(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
 }
