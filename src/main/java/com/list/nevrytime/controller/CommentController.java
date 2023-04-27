@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static com.list.nevrytime.dto.CommentDto.*;
 
 @RestController
@@ -21,8 +19,8 @@ public class CommentController {
         return ResponseEntity.ok(commentService.createComment(commentCreateRequestDto));
     }
 
-    @GetMapping("/{contentId}")
-    public ResponseEntity<List<CommentResponseDto>> findComment(@PathVariable Long contentId) {
-        return ResponseEntity.ok((commentService.findCommentByContentId(contentId)));
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<CommentDeleteResponseDto> deleteComment(@PathVariable Long commentId) {
+        return ResponseEntity.ok(commentService.deleteComment(commentId));
     }
 }
