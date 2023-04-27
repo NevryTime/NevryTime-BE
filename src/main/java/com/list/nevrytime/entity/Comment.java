@@ -36,6 +36,8 @@ public class Comment {
     private Long parentId;
     @ColumnDefault("0")
     private int depth;
+    @ColumnDefault("false")
+    private boolean isDeleted;
 
 
     private LocalDateTime createAt;

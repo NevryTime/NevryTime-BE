@@ -68,7 +68,7 @@ public class ContentService {
 
         QComment qComment = new QComment("comment");
 
-        List<CommentResponseDto> commentResponseDtos = jpaQueryFactory
+        List<CommentResponseDto> commentResponseDtoList = jpaQueryFactory
                 .select(Projections.constructor(
                         CommentResponseDto.class,
                         qComment.id.as("id"),
@@ -77,21 +77,15 @@ public class ContentService {
                         qComment.commentContent.as("commentContent"),
                         qComment.parentId.as("parentId"),
                         qComment.depth.as("depth"),
+                        qComment.isDeleted.as("isDeleted"),
                         qComment.createAt.as("createAt")
                 ))
                 .from(qComment)
                 .innerJoin(qComment.content)
                 .where(qComment.content.id.eq(contentId))
-                .orderBy(qComment.id.desc())
                 .fetch();
 
-//        List<Comment> comments = commentRepository.findCommentsByContentId(contentId);
-//        List<CommentResponseDto> resultList = comments
-//                .stream()
-//                .map(list -> modelMapper.map(list, CommentResponseDto.class))
-//                .collect(Collectors.toList());
-
-        return new ContentWithCommentResponseDto(contentResponseDto,commentResponseDtos);
+        return new ContentWithCommentResponseDto(contentResponseDto,commentResponseDtoList);
     }
 
     @Transactional
