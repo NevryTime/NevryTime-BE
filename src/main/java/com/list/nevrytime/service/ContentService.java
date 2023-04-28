@@ -54,6 +54,9 @@ public class ContentService {
                 .createAt(LocalDateTime.now())
                 .isImage(contentCreateRequestDto.isImage())
                 .isShow(contentCreateRequestDto.isShow())
+                .commentCount(0)
+                .hearts(0)
+                .likes(0)
                 .build();
 
         return ContentResponseDto.of(contentRepository.save(content));

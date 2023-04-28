@@ -45,6 +45,7 @@ public class CommentService {
                 .parentId(commentCreateRequestDto.getParentId())
                 .depth(commentCreateRequestDto.getDepth())
                 .createAt(LocalDateTime.now())
+                .isDeleted(false)
                 .build();
 
         content.setCommentCount(content.getCommentCount() + 1);
@@ -57,6 +58,10 @@ public class CommentService {
     public CommentDeleteResponseDto deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "commentId가 유효하지 않습니다."));
+
+        if (comment.getMember().getId() != SecurityUtil.getCurrentMemberId()) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "본인의 댓글만 삭제 할 수 있습니다.");
+        }
         if (comment.isDeleted()) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글 입니다.");
         }
@@ -64,7 +69,9 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "contentId가 유효하지 않습니다."));
         content.setCommentCount(content.getCommentCount() - 1);
         contentRepository.save(content);
+
         comment.setCommentContent("삭제된 댓글 입니다.");
+        comment.setDeleted(true);
         commentRepository.save(comment);
         return new CommentDeleteResponseDto(true, commentId);
     }

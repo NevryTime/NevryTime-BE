@@ -9,5 +9,7 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByName(String name);
+    void deleteMemberById(Long id);
     boolean existsByName(String name);
+    boolean existsByNickName(String nickName);
 }
