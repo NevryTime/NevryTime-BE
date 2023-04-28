@@ -39,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/test")
-    public ResponseEntity<Boolean> test() {
+    public ResponseEntity<TokenDeleteDto> test() {
         return ResponseEntity.ok(authService.test());
     }
 }

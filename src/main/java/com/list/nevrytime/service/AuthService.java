@@ -8,6 +8,7 @@ import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.security.jwt.TokenProvider;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.repository.RefreshTokenRepository;
+import com.list.nevrytime.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -104,6 +105,13 @@ public class AuthService {
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         refreshTokenRepository.deleteByKey(authentication.getName());
+        return new TokenDeleteDto(true);
+    }
+
+    @Transactional
+    public TokenDeleteDto test() {
+        memberRepository.findById(SecurityUtil.getCurrentMemberId())
+                .orElseThrow( () -> new CustomException(HttpStatus.BAD_REQUEST, "토큰이 유효하지 않습니다."));
         return new TokenDeleteDto(true);
     }
 }
