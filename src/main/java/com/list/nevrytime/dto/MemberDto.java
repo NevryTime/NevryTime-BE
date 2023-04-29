@@ -40,6 +40,7 @@ public class MemberDto {
     @NoArgsConstructor
     public static class RegisterRequestDto {
         private String name;
+        private String nickName;
         private String password;
     }
 
@@ -50,6 +51,7 @@ public class MemberDto {
     public static class RegisterResponseDto {
         private Boolean success;
         private String name;
+        private String nickName;
     }
 
     @Getter
@@ -67,6 +69,7 @@ public class MemberDto {
     public static class MemberResponseDto {
         private Boolean success;
         private String name;
+        private String nickName;
     }
 
     @Getter
@@ -77,6 +80,14 @@ public class MemberDto {
         private String rawPassword;
         private String newPassword;
     }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateNicknameRequestDto {
+        private String nickName;
+    }
+
 
     @Getter
     @Setter

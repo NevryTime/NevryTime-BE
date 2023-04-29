@@ -37,6 +37,7 @@ public class AuthService {
         Member member = Member.builder()
                 .name(registerRequestDto.getName())
                 .password(passwordEncoder.encode(registerRequestDto.getPassword()))
+                .nickName(registerRequestDto.getNickName())
                 .isBan(false)
                 .build();
         return memberRepository.save(member);
@@ -89,7 +90,7 @@ public class AuthService {
     public Member updatePassword(Long uid, UpdatePasswordRequestDto updatePasswordRequestDto) {
         Member member = memberRepository.findById(uid)
                 .orElseThrow(
-                        () -> new CustomException(HttpStatus.UNAUTHORIZED, "일치하는 유저가 없습니다."));
+                        () -> new CustomException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."));
         if (!passwordEncoder.matches(updatePasswordRequestDto.getRawPassword(), member.getPassword())) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
@@ -97,9 +98,16 @@ public class AuthService {
         String encodePassword = passwordEncoder.encode(updatePasswordRequestDto.getNewPassword());
         member.setPassword(encodePassword);
 
-        Member result = memberRepository.save(member);
+        return memberRepository.save(member);
+    }
 
-        return result;
+    public Member updateNickname(Long uid, UpdateNicknameRequestDto updateNicknameRequestDto) {
+        Member member = memberRepository.findById(uid)
+                .orElseThrow(
+                        () -> new CustomException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."));
+
+        member.setNickName(updateNicknameRequestDto.getNickName());
+        return memberRepository.save(member);
     }
 
     @Transactional
