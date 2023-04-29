@@ -1,9 +1,7 @@
 package com.list.nevrytime.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 
 public class TokenDto {
@@ -18,6 +16,23 @@ public class TokenDto {
         private String accessToken;
         private String refreshToken;
         private Long accessTokenExpiresIn;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UseRefreshTokenRequestDto {
+        private String refreshToken;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class UseRefreshTokenResponseDto {
+        private Boolean success;
+        private String accessToken;
     }
 
     @Getter
