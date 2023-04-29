@@ -47,5 +47,11 @@ public class CommentDto {
         private Long commentId;
     }
 
-
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateCommentRequestDto {
+        private String commentContent;
+    }
 }

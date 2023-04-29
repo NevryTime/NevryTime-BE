@@ -1,5 +1,6 @@
 package com.list.nevrytime.controller;
 
+import com.list.nevrytime.entity.Comment;
 import com.list.nevrytime.security.jwt.MemberPrincipal;
 import com.list.nevrytime.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,13 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<CommentDeleteResponseDto> deleteComment(@AuthenticationPrincipal MemberPrincipal memberPrincipal,@PathVariable Long commentId) {
+    public ResponseEntity<CommentDeleteResponseDto> deleteComment(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @PathVariable Long commentId) {
         return ResponseEntity.ok(commentService.deleteComment(memberPrincipal.getMember().getId(), commentId));
+    }
+
+    @PutMapping("/{commentId}")
+    public CommentResponseDto updateComment(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody UpdateCommentRequestDto updateCommentRequestDto) {
+        Comment comment = commentService.updateComment(memberPrincipal.getMember().getId(), updateCommentRequestDto);
+        return CommentResponseDto.of(comment);
     }
 }

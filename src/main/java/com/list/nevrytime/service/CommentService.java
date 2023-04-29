@@ -74,4 +74,26 @@ public class CommentService {
         commentRepository.save(comment);
         return new CommentDeleteResponseDto(true, commentId);
     }
+
+    @Transactional
+    public Comment updateComment(Long uid, UpdateCommentRequestDto updateCommentRequestDto) {
+        Comment comment = commentRepository.findById(uid)
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "commentId가 유효하지 않습니다."));
+
+        if (comment.isDeleted()) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "이미 삭제된 댓글 입니다.");
+        }
+
+        Comment newComment = Comment.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .member(comment.getMember())
+                .commentContent(updateCommentRequestDto.getCommentContent())
+                .parentId(comment.getParentId())
+                .depth(comment.getDepth())
+                .createAt(LocalDateTime.now())
+                .isDeleted(false)
+                .build();
+        return commentRepository.save(newComment);
+    }
 }
