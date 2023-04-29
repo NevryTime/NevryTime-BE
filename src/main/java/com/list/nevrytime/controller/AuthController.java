@@ -76,6 +76,13 @@ public class AuthController {
         return new MemberResponseDto(true, member.getName(), member.getNickName());
     }
 
+    @DeleteMapping("/withdrawal")
+    public DeleteMemberResponseDto withdrawal(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody DeleteMemberRequestDto deleteMemberRequestDto) {
+        Boolean result = authService.deleteMember(memberPrincipal.getMember().getId(), deleteMemberRequestDto.getPassword());
+
+        return new DeleteMemberResponseDto(result);
+    }
+
     @PostMapping("/test")
     public ResponseEntity<TokenDeleteDto> test() {
         return ResponseEntity.ok(authService.test());

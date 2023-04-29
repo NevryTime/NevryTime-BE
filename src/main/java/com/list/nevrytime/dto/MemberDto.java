@@ -1,14 +1,10 @@
 package com.list.nevrytime.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.list.nevrytime.entity.Authority;
-import com.list.nevrytime.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MemberDto {
 
@@ -31,7 +27,6 @@ public class MemberDto {
         private Long id;
         private String accessToken;
         private String refreshToken;
-//        private Boolean isAlreadyLogin;
     }
 
     @Getter
@@ -102,17 +97,16 @@ public class MemberDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UseRefreshTokenRequestDto {
-        private String refreshToken;
+    public static class DeleteMemberRequestDto {
+        private String password;
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class UseRefreshTokenResponseDto {
+    public static class DeleteMemberResponseDto {
         private Boolean success;
-        private String accessToken;
     }
 
 }

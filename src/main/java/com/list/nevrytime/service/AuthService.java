@@ -111,6 +111,20 @@ public class AuthService {
     }
 
     @Transactional
+    public Boolean deleteMember(Long uid, String password) {
+        Member member = memberRepository.findById(uid)
+                .orElseThrow(
+                        () -> new CustomException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."));
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        memberRepository.deleteById(uid);
+        refreshTokenRepository.deleteByKey(uid.toString());
+        return true;
+    }
+
+    @Transactional
     public TokenDeleteDto test() {
         memberRepository.findById(SecurityUtil.getCurrentMemberId())
                 .orElseThrow( () -> new CustomException(HttpStatus.BAD_REQUEST, "토큰이 유효하지 않습니다."));
