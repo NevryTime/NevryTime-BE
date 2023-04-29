@@ -1,5 +1,6 @@
 package com.list.nevrytime.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.list.nevrytime.entity.Authority;
 import com.list.nevrytime.entity.Member;
 import lombok.AllArgsConstructor;
@@ -16,33 +17,91 @@ public class MemberDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MemberRequestDto {
+    public static class LoginDto {
         private String name;
         private String password;
+    }
 
-        public Member toMember(PasswordEncoder passwordEncoder) {
-            return Member.builder()
-                    .name(name)
-                    .password(passwordEncoder.encode(password))
-                    .authority(Authority.ROLE_USER)
-                    .build();
-        }
-
-        public UsernamePasswordAuthenticationToken toAuthentication() {
-            return new UsernamePasswordAuthenticationToken(name, password);
-        }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class LoginResponseDto {
+        private Boolean success;
+        private Long id;
+        private String accessToken;
+        private String refreshToken;
+//        private Boolean isAlreadyLogin;
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MemberResponseDto {
+    public static class RegisterRequestDto {
         private String name;
+        private String password;
+    }
 
-        public static MemberResponseDto of(Member member) {
-            return new MemberResponseDto(member.getName());
-        }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class RegisterResponseDto {
+        private Boolean success;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InquireRequestDto {
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class MemberResponseDto {
+        private Boolean success;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdatePasswordRequestDto {
+        private String rawPassword;
+        private String newPassword;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class TestResponseDto {
+        private Boolean success;
+        private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UseRefreshTokenRequestDto {
+        private String refreshToken;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class UseRefreshTokenResponseDto {
+        private Boolean success;
+        private String accessToken;
     }
 
 }
