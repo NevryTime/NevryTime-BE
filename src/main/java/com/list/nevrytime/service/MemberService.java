@@ -1,5 +1,6 @@
 package com.list.nevrytime.service;
 
+import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +16,13 @@ import static com.list.nevrytime.dto.MemberDto.*;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public MemberResponseDto findMemberInfoById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .map(MemberResponseDto::of)
+    public Member findMemberInfoById(Long memberId) {
+       return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 유저 정보가 없습니다."));
     }
 
-    public MemberResponseDto findMemberInfoByName(String name) {
+    public Member findMemberInfoByName(String name) {
         return memberRepository.findByName(name)
-                .map(MemberResponseDto::of)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "유저 정보가 없습니다."));
     }
 }
