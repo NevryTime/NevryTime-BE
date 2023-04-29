@@ -33,8 +33,8 @@ public class Member implements UserDetails {
 
     private boolean isBan;
 
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
+//    @Enumerated(EnumType.STRING)
+//    private Authority authority;
 
     @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
