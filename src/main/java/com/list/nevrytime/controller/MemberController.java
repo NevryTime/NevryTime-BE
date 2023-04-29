@@ -16,11 +16,11 @@ public class MemberController {
 
     @GetMapping("/me")
     public ResponseEntity<MemberResponseDto> findMemberInfoById(@RequestBody Long memberId) {
-        return ResponseEntity.ok(memberService.findMemberInfoById(memberId));
+        return ResponseEntity.ok(new MemberResponseDto(true,memberService.findMemberInfoById(memberId).getName()));
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<MemberResponseDto> findMemberInfoByName(@PathVariable String name) {
-        return ResponseEntity.ok(memberService.findMemberInfoByName(name));
+        return ResponseEntity.ok(new MemberResponseDto(true ,memberService.findMemberInfoByName(name).getName()));
     }
 }
