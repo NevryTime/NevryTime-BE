@@ -7,7 +7,6 @@ import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
-import com.list.nevrytime.security.util.SecurityUtil;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,9 +28,9 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public CommentResponseDto createComment(CommentCreateRequestDto commentCreateRequestDto) {
+    public CommentResponseDto createComment(Long uid, CommentCreateRequestDto commentCreateRequestDto) {
 
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(
+        Member member = memberRepository.findById(uid).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "memberId가 유효하지 않습니다."));
 
         Content content = contentRepository.findById(commentCreateRequestDto.getContentId()).orElseThrow(
@@ -55,11 +54,11 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentDeleteResponseDto deleteComment(Long commentId) {
+    public CommentDeleteResponseDto deleteComment(Long uid,Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "commentId가 유효하지 않습니다."));
 
-        if (comment.getMember().getId() != SecurityUtil.getCurrentMemberId()) {
+        if (comment.getMember().getId() != uid) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "본인의 댓글만 삭제 할 수 있습니다.");
         }
         if (comment.isDeleted()) {

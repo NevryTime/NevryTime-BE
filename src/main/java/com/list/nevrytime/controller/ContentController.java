@@ -1,9 +1,11 @@
 package com.list.nevrytime.controller;
 
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
+import com.list.nevrytime.security.jwt.MemberPrincipal;
 import com.list.nevrytime.service.ContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import static com.list.nevrytime.dto.ContentDto.*;
@@ -26,8 +28,8 @@ public class ContentController {
     }
 
     @DeleteMapping("/{contentId}")
-    public ResponseEntity<ContentDeleteResponseDto> deleteContentByName(@PathVariable Long contentId ) {
-        return ResponseEntity.ok(contentService.deleteContentByName(contentId));
+    public ResponseEntity<ContentDeleteResponseDto> deleteContentByName(@AuthenticationPrincipal MemberPrincipal memberPrincipal,@PathVariable Long contentId ) {
+        return ResponseEntity.ok(contentService.deleteContentByName(memberPrincipal.getMember().getId(), contentId));
     }
 
     @PutMapping("/{contentId}")
@@ -41,8 +43,8 @@ public class ContentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ContentResponseDto> createContent(@RequestBody ContentCreateRequestDto contentCreateRequestDto) {
-        return ResponseEntity.ok(contentService.createContent(contentCreateRequestDto));
+    public ResponseEntity<ContentResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto) {
+        return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto));
     }
 
     @GetMapping("/popular")

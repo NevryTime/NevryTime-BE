@@ -7,7 +7,6 @@ import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.repository.ScrapRepository;
-import com.list.nevrytime.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,9 @@ public class ScrapService {
     private final ContentRepository contentRepository;
 
     @Transactional
-    public ScrapResponseDto insert(ScrapRequestDto scrapRequestDto) {
+    public ScrapResponseDto insert(Long uid, ScrapRequestDto scrapRequestDto) {
 
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+        Member member = memberRepository.findById(uid)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = contentRepository.findById(scrapRequestDto.getContentId())
@@ -48,9 +47,9 @@ public class ScrapService {
     }
 
     @Transactional
-    public ScrapDeleteResponseDto delete(ScrapRequestDto scrapRequestDto) {
+    public ScrapDeleteResponseDto delete(Long uid, ScrapRequestDto scrapRequestDto) {
 
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId())
+        Member member = memberRepository.findById(uid)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = contentRepository.findById(scrapRequestDto.getContentId())

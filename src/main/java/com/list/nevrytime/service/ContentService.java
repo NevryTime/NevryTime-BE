@@ -7,7 +7,6 @@ import com.list.nevrytime.repository.BoardRepository;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
-import com.list.nevrytime.security.util.SecurityUtil;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +38,11 @@ public class ContentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ContentResponseDto createContent(ContentCreateRequestDto contentCreateRequestDto) {
+    public ContentResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
 
-        Member member = memberRepository.findById(SecurityUtil.getCurrentMemberId()).orElseThrow(
+        Member member = memberRepository.findById(uid).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "로그인 인증이 정상적으로 처리되지 않은 상태입니다."));
 
         Content content = Content.builder()
@@ -100,8 +99,8 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentDeleteResponseDto deleteContentByName(Long contentId) {
-        Content content = contentRepository.findContentByMember_IdAndId(SecurityUtil.getCurrentMemberId(), contentId).orElseThrow(
+    public ContentDeleteResponseDto deleteContentByName(Long uid, Long contentId) {
+        Content content = contentRepository.findContentByMember_IdAndId(uid, contentId).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
         contentRepository.deleteById(contentId);
         return new ContentDeleteResponseDto(true);
@@ -122,6 +121,8 @@ public class ContentService {
                 .isShow(contentUpdateRequestDto.getIsShow())
                 .likes(findContent.getLikes())
                 .createAt(LocalDateTime.now())
+                .commentCount(findContent.getCommentCount())
+                .hearts(findContent.getHearts())
                 .build();
 
         return new ContentUpdateResponseDto(true, ContentResponseDto.of(contentRepository.save(content)));

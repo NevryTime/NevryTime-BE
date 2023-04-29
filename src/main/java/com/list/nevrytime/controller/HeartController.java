@@ -1,8 +1,10 @@
 package com.list.nevrytime.controller;
 
+import com.list.nevrytime.security.jwt.MemberPrincipal;
 import com.list.nevrytime.service.HeartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,13 +19,13 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping("/")
-    public ResponseEntity<HeartResponseDto> insert(@RequestBody HeartRequestDto heartRequestDto) {
-        return ResponseEntity.ok(heartService.insert(heartRequestDto));
+    public ResponseEntity<HeartResponseDto> insert(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody HeartRequestDto heartRequestDto) {
+        return ResponseEntity.ok(heartService.insert(memberPrincipal.getMember().getId(), heartRequestDto));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<HeartDeleteResponseDto> delete(@RequestBody HeartRequestDto heartRequestDto) {
-        return ResponseEntity.ok(heartService.delete(heartRequestDto));
+    public ResponseEntity<HeartDeleteResponseDto> delete(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody HeartRequestDto heartRequestDto) {
+        return ResponseEntity.ok(heartService.delete(memberPrincipal.getMember().getId(), heartRequestDto));
     }
 
 }
