@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/signup")
     public RegisterResponseDto register(@RequestBody @Valid RegisterRequestDto registerRequestDto) {
         Member member = authService.register(registerRequestDto);
-        return new RegisterResponseDto(true, member.getName());
+        return new RegisterResponseDto(true, member.getName(), member.getNickName());
     }
 
 
@@ -67,7 +67,13 @@ public class AuthController {
     @PutMapping("/password")
     public MemberResponseDto updatePassword(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
         Member member = authService.updatePassword(memberPrincipal.getMember().getId(), updatePasswordRequestDto);
-        return new MemberResponseDto(true, member.getName());
+        return new MemberResponseDto(true, member.getName(), member.getNickName());
+    }
+
+    @PutMapping("/nickname")
+    public MemberResponseDto updateNickname(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody UpdateNicknameRequestDto updateNicknameRequestDto) {
+        Member member = authService.updateNickname(memberPrincipal.getMember().getId(), updateNicknameRequestDto);
+        return new MemberResponseDto(true, member.getName(), member.getNickName());
     }
 
     @PostMapping("/test")
