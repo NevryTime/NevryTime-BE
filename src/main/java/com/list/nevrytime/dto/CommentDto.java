@@ -15,7 +15,7 @@ public class CommentDto {
 
         private Long id;
         private Long contentId;
-        private String memberName;
+        private String nickName;
         private String commentContent;
         private Long parentId;
         private int depth;
@@ -23,7 +23,7 @@ public class CommentDto {
         private LocalDateTime createAt;
 
         public static CommentResponseDto of(Comment comment) {
-            return new CommentResponseDto(comment.getId(),comment.getMember().getId(), comment.getMember().getName(), comment.getCommentContent(), comment.getParentId(), comment.getDepth(), comment.isDeleted(), comment.getCreateAt());
+            return new CommentResponseDto(comment.getId(),comment.getMember().getId(), comment.getMember().getNickName(), comment.getCommentContent(), comment.getParentId(), comment.getDepth(), comment.isDeleted(), comment.getCreateAt());
         }
     }
 

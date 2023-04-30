@@ -74,7 +74,7 @@ public class ContentService {
                         CommentResponseDto.class,
                         qComment.id.as("id"),
                         qComment.content.id.as("contentId"),
-                        qComment.member.id.as("memberId"),
+                        qComment.member.nickName.as("nickName"),
                         qComment.commentContent.as("commentContent"),
                         qComment.parentId.as("parentId"),
                         qComment.depth.as("depth"),
@@ -119,7 +119,7 @@ public class ContentService {
             List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
                     .select(Projections.constructor(
                             ContentResponseDto.class,
-                            qContent.id, qContent.board.name, qContent.member.name,
+                            qContent.id, qContent.board.name, qContent.member.nickName,
                             qContent.title, qContent.content, qContent.commentCount,
                             qContent.scraps, qContent.likes, qContent.createAt,
                             qContent.isImage, qContent.isShow))
@@ -144,7 +144,7 @@ public class ContentService {
         List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
                 .select(Projections.constructor(
                         ContentResponseDto.class,
-                        qContent.id, qContent.board.name, qContent.member.name,
+                        qContent.id, qContent.board.name, qContent.member.nickName,
                         qContent.title, qContent.content, qContent.commentCount,
                         qContent.scraps, qContent.likes, qContent.createAt,
                         qContent.isImage, qContent.isShow))

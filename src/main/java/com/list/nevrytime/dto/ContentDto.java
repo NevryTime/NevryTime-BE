@@ -30,7 +30,7 @@ public class ContentDto {
 
         private Long id;
         private String boardName;
-        private String memberName;
+        private String nickName;
         private String title;
         private String content;
         private int commentCount;
@@ -41,7 +41,7 @@ public class ContentDto {
         private boolean isShow;
 
         public static ContentResponseDto of(Content content) {
-            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
+            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getNickName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
         }
     }
 
