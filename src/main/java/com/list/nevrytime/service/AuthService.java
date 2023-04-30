@@ -74,17 +74,9 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDeleteDto logout(TokenRequestDto tokenRequestDto) {
-        // 1. Refresh Token 검증
-        if (!jwtService.validateAccessToken(tokenRequestDto.getAccessToken())) {
-            throw new CustomException(HttpStatus.UNAUTHORIZED, "Access Token 이 유효하지 않습니다.");
-        }
-
-        // 2. Access Token 에서 Member ID 가져오기
-        Authentication authentication = jwtService.getAuthentication(tokenRequestDto.getAccessToken());
-
-        refreshTokenRepository.deleteByKey(authentication.getName());
-        return new TokenDeleteDto(true);
+    public Boolean logout(Long uid) {
+        refreshTokenRepository.deleteByKey(uid.toString());
+        return true;
     }
 
     public Member updatePassword(Long uid, UpdatePasswordRequestDto updatePasswordRequestDto) {

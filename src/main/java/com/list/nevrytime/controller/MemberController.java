@@ -46,6 +46,9 @@ public class MemberController {
 
     @GetMapping("/me/comment")
     public ContentListResponseDto findMyComment(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         List<ContentResponseDto> contents = contentService.findMyCommentInContent(memberPrincipal.getMember().getId());
         if (contents.isEmpty()) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "댓글을 작성한 글이 없습니다.");
@@ -55,6 +58,9 @@ public class MemberController {
 
     @GetMapping("/me/scrap")
     public ContentListResponseDto findMyScrap(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         List<ContentResponseDto> myScrap = contentService.findMyScrap(memberPrincipal.getMember().getId());
         if (myScrap.isEmpty()) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "스크랩한 글이 없습니다.");

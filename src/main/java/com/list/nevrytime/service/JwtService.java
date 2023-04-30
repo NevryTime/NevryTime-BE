@@ -67,10 +67,7 @@ public class JwtService {
 	}
 
 	public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-		LOGGER.info("[JwtService] getAuthentication 시작");
-//		Long uid = getUidFromToken(sliceToken(token));
 		Long uid = getUidFromToken(token);
-		LOGGER.info("[JwtService] getUidFromToken 의 결과 : {}", uid);
 		Member member = memberRepository.findById(uid)
 				.orElseThrow(() -> new RuntimeException("Member 를 찾지 못했습니다."));
 		MemberPrincipal memberPrincipal = new MemberPrincipal(member);

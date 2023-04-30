@@ -1,9 +1,11 @@
 package com.list.nevrytime.controller;
 
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
+import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.security.jwt.MemberPrincipal;
 import com.list.nevrytime.service.ContentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,9 @@ public class ContentController {
 
     @DeleteMapping("/{contentId}")
     public ResponseEntity<ContentDeleteResponseDto> deleteContentByName(@AuthenticationPrincipal MemberPrincipal memberPrincipal,@PathVariable Long contentId ) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         return ResponseEntity.ok(contentService.deleteContentByName(memberPrincipal.getMember().getId(), contentId));
     }
 
@@ -44,6 +49,9 @@ public class ContentController {
 
     @PostMapping("/create")
     public ResponseEntity<ContentResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto));
     }
 
