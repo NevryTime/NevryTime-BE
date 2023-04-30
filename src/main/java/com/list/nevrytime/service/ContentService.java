@@ -96,7 +96,7 @@ public class ContentService {
             List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
                     .select(Projections.constructor(
                             ContentResponseDto.class,
-                            qContent.id, qContent.board.name, qContent.member.name,
+                            qContent.id, qContent.board.name, qContent.member.nickName,
                             qContent.title, qContent.content, qContent.commentCount,
                             qContent.scraps, qContent.likes, qContent.createAt,
                             qContent.isImage, qContent.isShow))
