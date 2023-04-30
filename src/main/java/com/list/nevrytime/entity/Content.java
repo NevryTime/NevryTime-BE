@@ -51,6 +51,7 @@ public class Content {
     private boolean isShow;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
 

@@ -37,6 +37,7 @@ public class Member implements UserDetails {
 //    private Authority authority;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
 

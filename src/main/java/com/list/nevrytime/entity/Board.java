@@ -27,6 +27,7 @@ public class Board {
     private String name;
 
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
 
