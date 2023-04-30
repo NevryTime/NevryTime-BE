@@ -42,7 +42,7 @@ public class Content {
     @ColumnDefault("0")
     private int commentCount;
     @ColumnDefault("0")
-    private int hearts;
+    private int scraps;
     @ColumnDefault("0")
     private int likes;
     @ColumnDefault("false")

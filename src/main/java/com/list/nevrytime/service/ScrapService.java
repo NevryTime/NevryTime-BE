@@ -38,6 +38,9 @@ public class ScrapService {
         }
 
 
+        content.setScraps(content.getScraps() + 1);
+        contentRepository.save(content);
+
         Scrap scrap = Scrap.builder()
                 .member(member)
                 .content(content)
@@ -57,6 +60,9 @@ public class ScrapService {
 
         Scrap scrap = scrapRepository.findByMemberIdAndContentId(member.getId(), content.getId())
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "좋아요 기록이 존재하지 않습니다."));
+
+        content.setScraps(content.getScraps() - 1);
+        contentRepository.save(content);
 
         scrapRepository.delete(scrap);
         return new ScrapDeleteResponseDto(true);

@@ -55,7 +55,7 @@ public class ContentService {
                 .isImage(contentCreateRequestDto.isImage())
                 .isShow(contentCreateRequestDto.isShow())
                 .commentCount(0)
-                .hearts(0)
+                .scraps(0)
                 .likes(0)
                 .build();
 
@@ -98,7 +98,7 @@ public class ContentService {
                             ContentResponseDto.class,
                             qContent.id, qContent.board.name, qContent.member.name,
                             qContent.title, qContent.content, qContent.commentCount,
-                            qContent.hearts, qContent.likes, qContent.createAt,
+                            qContent.scraps, qContent.likes, qContent.createAt,
                             qContent.isImage, qContent.isShow))
                     .from(qContent)
                     .innerJoin(qContent.member)
@@ -121,7 +121,7 @@ public class ContentService {
                             ContentResponseDto.class,
                             qContent.id, qContent.board.name, qContent.member.name,
                             qContent.title, qContent.content, qContent.commentCount,
-                            qContent.hearts, qContent.likes, qContent.createAt,
+                            qContent.scraps, qContent.likes, qContent.createAt,
                             qContent.isImage, qContent.isShow))
                     .from(qContent)
                     .where(qContent.id.in(JPAExpressions
@@ -146,7 +146,7 @@ public class ContentService {
                         ContentResponseDto.class,
                         qContent.id, qContent.board.name, qContent.member.name,
                         qContent.title, qContent.content, qContent.commentCount,
-                        qContent.hearts, qContent.likes, qContent.createAt,
+                        qContent.scraps, qContent.likes, qContent.createAt,
                         qContent.isImage, qContent.isShow))
                 .from(qContent)
                 .where(qContent.id.in(JPAExpressions
@@ -192,7 +192,7 @@ public class ContentService {
                 .likes(findContent.getLikes())
                 .createAt(LocalDateTime.now())
                 .commentCount(findContent.getCommentCount())
-                .hearts(findContent.getHearts())
+                .scraps(findContent.getScraps())
                 .build();
 
         return new ContentUpdateResponseDto(true, ContentResponseDto.of(contentRepository.save(content)));
@@ -242,7 +242,7 @@ public class ContentService {
 
     private ContentPageResponseDto getContentPageResponseDto(Page<Content> contents) {
         Page<ContentResponseDto> toMap = contents.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getHearts(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
 }

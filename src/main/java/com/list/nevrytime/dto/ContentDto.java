@@ -34,14 +34,14 @@ public class ContentDto {
         private String title;
         private String content;
         private int commentCount;
-        private int hearts;
+        private int scraps;
         private int likes;
         private LocalDateTime createAt;
         private boolean isImage;
         private boolean isShow;
 
         public static ContentResponseDto of(Content content) {
-            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getHearts(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
+            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
         }
     }
 
