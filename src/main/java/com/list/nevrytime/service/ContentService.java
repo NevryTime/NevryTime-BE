@@ -242,7 +242,7 @@ public class ContentService {
 
     private ContentPageResponseDto getContentPageResponseDto(Page<Content> contents) {
         Page<ContentResponseDto> toMap = contents.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getNickName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
 }
