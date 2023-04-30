@@ -92,25 +92,55 @@ public class ContentService {
     @Transactional
     public List<ContentResponseDto> findContents(Long uid) {
         QContent qContent = new QContent("content");
-        List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
-                .select(Projections.constructor(
-                        ContentResponseDto.class,
-                        qContent.id, qContent.board.name, qContent.member.name,
-                        qContent.title, qContent.content, qContent.commentCount,
-                                qContent.hearts, qContent.likes, qContent.createAt,
-                                qContent.isImage, qContent.isShow))
-                .from(qContent)
-                .innerJoin(qContent.member)
-                .where(qContent.member.id.eq(uid))
-                .fetch();
+        try {
+            List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
+                    .select(Projections.constructor(
+                            ContentResponseDto.class,
+                            qContent.id, qContent.board.name, qContent.member.name,
+                            qContent.title, qContent.content, qContent.commentCount,
+                            qContent.hearts, qContent.likes, qContent.createAt,
+                            qContent.isImage, qContent.isShow))
+                    .from(qContent)
+                    .innerJoin(qContent.member)
+                    .where(qContent.member.id.eq(uid))
+                    .fetch();
 
-        return contentResponseDtoList;
+            return contentResponseDtoList;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "작성한 글이 없습니다.");
+        }
     }
 
     @Transactional
     public List<ContentResponseDto> findMyCommentInContent(Long uid) {
         QContent qContent = new QContent("content");
         QComment qComment = new QComment("comment");
+        try {
+            List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
+                    .select(Projections.constructor(
+                            ContentResponseDto.class,
+                            qContent.id, qContent.board.name, qContent.member.name,
+                            qContent.title, qContent.content, qContent.commentCount,
+                            qContent.hearts, qContent.likes, qContent.createAt,
+                            qContent.isImage, qContent.isShow))
+                    .from(qContent)
+                    .where(qContent.id.in(JPAExpressions
+                            .select(qComment.content.id)
+                            .from(qComment)
+                            .where(qComment.member.id.eq(uid))
+                    ))
+                    .fetch();
+
+            return contentResponseDtoList;
+        } catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "댓글을 작성한 글이 없습니다.");
+        }
+    }
+
+    @Transactional
+    public List<ContentResponseDto> findMyScrap(Long uid) {
+        QContent qContent = new QContent("content");
+        QScrap qScrap = new QScrap("scrap");
         List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
                 .select(Projections.constructor(
                         ContentResponseDto.class,
@@ -120,9 +150,9 @@ public class ContentService {
                         qContent.isImage, qContent.isShow))
                 .from(qContent)
                 .where(qContent.id.in(JPAExpressions
-                        .select(qComment.content.id)
-                        .from(qComment)
-                        .where(qComment.member.id.eq(uid))
+                        .select(qScrap.content.id)
+                        .from(qScrap)
+                        .where(qScrap.member.id.eq(uid))
                 ))
                 .fetch();
         return contentResponseDtoList;

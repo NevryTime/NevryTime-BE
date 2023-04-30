@@ -48,8 +48,17 @@ public class MemberController {
     public ContentListResponseDto findMyComment(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         List<ContentResponseDto> contents = contentService.findMyCommentInContent(memberPrincipal.getMember().getId());
         if (contents.isEmpty()) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "작성한 글이 없습니다.");
+            throw new CustomException(HttpStatus.BAD_REQUEST, "댓글을 작성한 글이 없습니다.");
         }
         return new ContentListResponseDto(true, contents);
+    }
+
+    @GetMapping("/me/scrap")
+    public ContentListResponseDto findMyScrap(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        List<ContentResponseDto> myScrap = contentService.findMyScrap(memberPrincipal.getMember().getId());
+        if (myScrap.isEmpty()) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "스크랩한 글이 없습니다.");
+        }
+        return new ContentListResponseDto(true, myScrap);
     }
 }
