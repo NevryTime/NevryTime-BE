@@ -38,7 +38,7 @@ public class ContentController {
     }
 
     @GetMapping("/{boardId}/p/{page}")
-    public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page, @RequestBody int length) {
+    public ResponseEntity<ContentPageResponseDto> pageContent(@PathVariable Long boardId, @PathVariable int page, @RequestParam int length) {
         return ResponseEntity.ok(contentService.pageContent(boardId, page, length));
     }
 
