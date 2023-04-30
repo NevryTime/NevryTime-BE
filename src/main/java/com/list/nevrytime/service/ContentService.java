@@ -8,6 +8,7 @@ import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -103,6 +104,27 @@ public class ContentService {
                 .where(qContent.member.id.eq(uid))
                 .fetch();
 
+        return contentResponseDtoList;
+    }
+
+    @Transactional
+    public List<ContentResponseDto> findMyCommentInContent(Long uid) {
+        QContent qContent = new QContent("content");
+        QComment qComment = new QComment("comment");
+        List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
+                .select(Projections.constructor(
+                        ContentResponseDto.class,
+                        qContent.id, qContent.board.name, qContent.member.name,
+                        qContent.title, qContent.content, qContent.commentCount,
+                        qContent.hearts, qContent.likes, qContent.createAt,
+                        qContent.isImage, qContent.isShow))
+                .from(qContent)
+                .where(qContent.id.in(JPAExpressions
+                        .select(qComment.content.id)
+                        .from(qComment)
+                        .where(qComment.member.id.eq(uid))
+                ))
+                .fetch();
         return contentResponseDtoList;
     }
 
