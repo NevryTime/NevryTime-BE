@@ -60,24 +60,37 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<TokenDeleteDto> logout(@RequestBody TokenRequestDto tokenRequestDto) {
-        return ResponseEntity.ok(authService.logout(tokenRequestDto));
+    public TokenDeleteDto logout(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
+        Boolean logout = authService.logout(memberPrincipal.getMember().getId());
+        return new TokenDeleteDto(logout);
     }
 
     @PutMapping("/password")
     public MemberResponseDto updatePassword(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         Member member = authService.updatePassword(memberPrincipal.getMember().getId(), updatePasswordRequestDto);
         return new MemberResponseDto(true, member.getName(), member.getNickName());
     }
 
     @PutMapping("/nickname")
     public MemberResponseDto updateNickname(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody UpdateNicknameRequestDto updateNicknameRequestDto) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         Member member = authService.updateNickname(memberPrincipal.getMember().getId(), updateNicknameRequestDto);
         return new MemberResponseDto(true, member.getName(), member.getNickName());
     }
 
     @DeleteMapping("/withdrawal")
     public DeleteMemberResponseDto withdrawal(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody DeleteMemberRequestDto deleteMemberRequestDto) {
+        if (memberPrincipal.getMember().getId() == null) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
+        }
         Boolean result = authService.deleteMember(memberPrincipal.getMember().getId(), deleteMemberRequestDto.getPassword());
 
         return new DeleteMemberResponseDto(result);
