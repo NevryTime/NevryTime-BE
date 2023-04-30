@@ -85,7 +85,25 @@ public class ContentService {
                 .where(qComment.content.id.eq(contentId))
                 .fetch();
 
-        return new ContentWithCommentResponseDto(contentResponseDto,commentResponseDtoList);
+        return new ContentWithCommentResponseDto(contentResponseDto, commentResponseDtoList);
+    }
+
+    @Transactional
+    public List<ContentResponseDto> findContents(Long uid) {
+        QContent qContent = new QContent("content");
+        List<ContentResponseDto> contentResponseDtoList = jpaQueryFactory
+                .select(Projections.constructor(
+                        ContentResponseDto.class,
+                        qContent.id, qContent.board.name, qContent.member.name,
+                        qContent.title, qContent.content, qContent.commentCount,
+                                qContent.hearts, qContent.likes, qContent.createAt,
+                                qContent.isImage, qContent.isShow))
+                .from(qContent)
+                .innerJoin(qContent.member)
+                .where(qContent.member.id.eq(uid))
+                .fetch();
+
+        return contentResponseDtoList;
     }
 
     @Transactional
