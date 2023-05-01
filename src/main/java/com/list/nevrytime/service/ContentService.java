@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -244,5 +245,29 @@ public class ContentService {
         Page<ContentResponseDto> toMap = contents.map(
                 content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getNickName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
+    }
+
+    public MainContentResponseDto getMainContents() {
+        PageRequest pageRequest = PageRequest.of(0, 4, Sort.Direction.DESC, "CreateAt");
+        QContent qContent = new QContent("content");
+
+        List<MainContentsDto> mainContents = new ArrayList<>();
+
+        for (int boardId = 1; boardId < 12; boardId++) {
+            List<MainContentsDto> mainContentsDtos = jpaQueryFactory
+                    .select(Projections.constructor(
+                            MainContentsDto.class,
+                            qContent.id, qContent.board.id, qContent.title))
+                    .from(qContent)
+                    .where(qContent.board.id.eq((long) boardId))
+                    .offset(pageRequest.getOffset())
+                    .limit(pageRequest.getPageSize())
+                    .orderBy(qContent.createAt.desc())
+                    .fetch();
+
+            mainContents.addAll(mainContentsDtos);
+        }
+
+        return new MainContentResponseDto(true, mainContents);
     }
 }

@@ -1,5 +1,6 @@
 package com.list.nevrytime.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.list.nevrytime.entity.Content;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -109,5 +110,25 @@ public class ContentDto {
         private List<ContentResponseDto> contentPage;
         private int contentTotalPages;
         private Long contentTotalElements;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MainContentsDto {
+        private Long contentId;
+        private Long boardId;
+        private String title;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class MainContentResponseDto {
+        private Boolean success;
+        private List<MainContentsDto> contents;
+
     }
 }

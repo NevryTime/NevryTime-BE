@@ -74,4 +74,9 @@ public class ContentController {
     public ResponseEntity<ContentPageResponseDto> bestContent(@PathVariable int page) {
         return ResponseEntity.ok(contentService.bestContent(page));
     }
+
+    @GetMapping("/main")
+    public MainContentResponseDto mainContent() {
+        return contentService.getMainContents();
+    }
 }
