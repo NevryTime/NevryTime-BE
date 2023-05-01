@@ -47,7 +47,7 @@ public class Content {
     private int likes;
     @ColumnDefault("false")
     private boolean isImage;
-    @ColumnDefault("false")
+    @ColumnDefault("true")
     private boolean isShow;
 
     @JsonIgnore
