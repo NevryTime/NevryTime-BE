@@ -49,6 +49,10 @@ public class AuthService {
                 .orElseThrow(
                         () -> new CustomException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 일치하지 않습니다."));
 
+        if (member.isEnabled()) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "회원 탈퇴된 유저 입니다.");
+        }
+
         if (!passwordEncoder.matches(login.getPassword(), member.getPassword())) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 일치하지 않습니다.");
         }
@@ -111,7 +115,14 @@ public class AuthService {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
-        memberRepository.deleteById(uid);
+
+        member.setBan(true);
+        member.setNickName("알수없음");
+        member.setName(null);
+        member.setPassword(null);
+
+        memberRepository.save(member);
+
         refreshTokenRepository.deleteByKey(uid.toString());
         return true;
     }

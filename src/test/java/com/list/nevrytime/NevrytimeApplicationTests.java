@@ -9,5 +9,4 @@ class NevrytimeApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
