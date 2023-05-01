@@ -8,7 +8,7 @@ spring:
 #    driver-class-name: org.h2.Driver
 #    username: sa
 #    password:
-    url: jdbc:mariadb://svc.sel3.cloudtype.app:30517/ntdb?characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mariadb://mariadb:3306/ntdb?characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: 1234
@@ -17,7 +17,7 @@ spring:
 #    database-platform: org.hibernate.dialect.H2Dialect
 #    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -27,7 +27,7 @@ logging:
   level:
     com.tutorial: debug
 
-# HS512 ????? ??? ??? ??? 512bit, ? 64byte ??? secret key? ???? ??.
+# HS512 ????? ??? ??? ??? 512bit ? 64byte ??? secret key? ???? ??.
 # Secret ?? ?? ???? Base64 ? ???? ? ?? (?? ???? ???? ??? ??? ??)
 # $ echo 'spring-boot-security-jwt-tutorial-jiwoon-spring-boot-security-jwt-tutorial' | base64
 jwt:
