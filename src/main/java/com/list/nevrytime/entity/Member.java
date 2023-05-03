@@ -25,12 +25,16 @@ public class Member implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String name;
 
+    @Column
     private String nickName;
 
+    @Column
     private String password;
 
+    @Column
     private boolean isBan;
 
 //    @Enumerated(EnumType.STRING)

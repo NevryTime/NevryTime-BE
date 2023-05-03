@@ -30,6 +30,7 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column
     private String commentContent;
 
     @ColumnDefault("0")

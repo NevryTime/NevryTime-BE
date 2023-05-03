@@ -31,6 +31,7 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     List<Content> contents = new ArrayList<>();
 
+    @Column
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 }

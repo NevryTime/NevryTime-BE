@@ -35,8 +35,11 @@ public class Content {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column
     private String title;
+    @Column
     private String content;
+    @Column
     private LocalDateTime createAt;
 
     @ColumnDefault("0")
