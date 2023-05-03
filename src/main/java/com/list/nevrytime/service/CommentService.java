@@ -122,9 +122,15 @@ public class CommentService {
                 .innerJoin(qComment.content)
                 .where(qComment.content.id.eq(contentId))
                 .fetch();
+
         for (CommentResponseDto commentResponseDto : commentResponseDtoList) {
             if (!commentResponseDto.isShow()) {
                 commentResponseDto.setNickName("익명");
+            }
+            Comment comment = commentRepository.findById(commentResponseDto.getId())
+                    .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "commentId가 유효하지 않습니다."));
+            if (contentId == comment.getMember().getId()) {
+                commentResponseDto.setNickName(commentResponseDto.getNickName() + "(글쓴이)");
             }
         }
         return commentResponseDtoList;
