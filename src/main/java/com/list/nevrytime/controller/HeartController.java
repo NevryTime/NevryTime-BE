@@ -20,7 +20,7 @@ public class HeartController {
 
     private final HeartService heartService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<HeartResponseDto> insert(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody HeartRequestDto heartRequestDto) {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
@@ -28,7 +28,7 @@ public class HeartController {
         return ResponseEntity.ok(heartService.insert(memberPrincipal.getMember().getId(), heartRequestDto));
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping
     public ResponseEntity<HeartDeleteResponseDto> delete(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody HeartRequestDto heartRequestDto) {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");

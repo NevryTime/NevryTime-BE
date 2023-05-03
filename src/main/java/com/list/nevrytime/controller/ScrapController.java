@@ -20,7 +20,7 @@ public class ScrapController {
 
     private final ScrapService scrapService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ScrapResponseDto> insert(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody @Valid ScrapRequestDto scrapRequestDto) {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
@@ -28,7 +28,7 @@ public class ScrapController {
         return ResponseEntity.ok(scrapService.insert(memberPrincipal.getMember().getId(),scrapRequestDto));
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping
     public ResponseEntity<ScrapDeleteResponseDto> delete(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody @Valid ScrapRequestDto scrapRequestDto) {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
