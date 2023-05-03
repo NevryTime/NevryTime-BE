@@ -21,6 +21,7 @@ public class ContentDto {
 
         private ContentResponseDto contentResponseDto;
         private List<CommentResponseDto> commentList;
+        private boolean isWriter;
     }
 
     @Getter

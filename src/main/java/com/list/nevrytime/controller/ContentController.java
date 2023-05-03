@@ -25,8 +25,8 @@ public class ContentController {
     }
 
     @GetMapping("/{contentId}")
-    public ResponseEntity<ContentWithCommentResponseDto> findContentById(@PathVariable Long contentId) {
-        return ResponseEntity.ok(contentService.findContentById(contentId));
+    public ResponseEntity<ContentWithCommentResponseDto> findContentById(@PathVariable Long contentId,@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+        return ResponseEntity.ok(contentService.findContentById(memberPrincipal.getMember().getId(),contentId));
     }
 
     @DeleteMapping("/{contentId}")

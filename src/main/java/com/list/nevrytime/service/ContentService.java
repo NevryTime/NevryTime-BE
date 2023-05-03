@@ -7,6 +7,8 @@ import com.list.nevrytime.repository.BoardRepository;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
+import com.list.nevrytime.security.jwt.MemberPrincipal;
+import com.list.nevrytime.security.util.SecurityUtil;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -65,14 +67,19 @@ public class ContentService {
     }
 
     @Transactional
-    public ContentWithCommentResponseDto findContentById(Long contentId) {
-        ContentResponseDto contentResponseDto = ContentResponseDto.of(contentRepository.findById(contentId)
-                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다.")));
+    public ContentWithCommentResponseDto findContentById(Long memberId, Long contentId ) {
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
+
+        ContentResponseDto contentResponseDto = ContentResponseDto.of(content);
         if (contentResponseDto.isShow() == false) {
             contentResponseDto.setNickName("익명");
         }
         List<CommentResponseDto> commentsInContent = commentService.findCommentInContent(contentId);
-        return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent);
+        if (memberId == content.getMember().getId()) {
+            return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent, true);
+        }
+        return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent, false);
     }
 
     @Transactional
