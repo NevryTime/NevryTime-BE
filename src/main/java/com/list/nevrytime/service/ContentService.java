@@ -86,8 +86,10 @@ public class ContentService {
                 .innerJoin(qComment.content)
                 .where(qComment.content.id.eq(contentId))
                 .fetch();
-
-        return new ContentWithCommentResponseDto(contentResponseDto, commentResponseDtoList);
+        if (contentResponseDto.isShow() == false) {
+            contentResponseDto.setNickName("익명");
+        }
+            return new ContentWithCommentResponseDto(contentResponseDto, commentResponseDtoList);
     }
 
     @Transactional
@@ -244,6 +246,12 @@ public class ContentService {
     private ContentPageResponseDto getContentPageResponseDto(Page<Content> contents) {
         Page<ContentResponseDto> toMap = contents.map(
                 content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getNickName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
+
+        for (ContentResponseDto contentResponseDto : toMap) {
+            if (!contentResponseDto.isShow()) {
+                contentResponseDto.setNickName("익명");
+            }
+        }
         return new ContentPageResponseDto(true, toMap.getContent(), toMap.getTotalPages(), toMap.getTotalElements());
     }
 
