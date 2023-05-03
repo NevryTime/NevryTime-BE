@@ -193,7 +193,7 @@ public class ContentService {
 
     @Transactional
     public List<ContentResponseDto> popularContent() {
-        List<Content> contents = contentRepository.findTop2ByOrderByLikesDescContentDesc();
+        List<Content> contents = contentRepository.findTop2ByOrderByLikesDescCreateAtDesc();
         List<ContentResponseDto> resultList = contents
                 .stream()
                 .map(list -> modelMapper.map(list, ContentResponseDto.class))

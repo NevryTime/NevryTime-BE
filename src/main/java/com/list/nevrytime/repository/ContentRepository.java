@@ -14,7 +14,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     Optional<Content> findContentByMember_IdAndId(Long memberId, Long contentId);
     Page<Content> findByBoardId(Long boardId, Pageable pageable);
-    List<Content> findTop2ByOrderByLikesDescContentDesc();
+    List<Content> findTop2ByOrderByLikesDescCreateAtDesc();
     Page<Content> findByLikesGreaterThanOrderByCreateAtDesc(int likes, Pageable pageable);
     List<Content> findTop4ByLikesGreaterThanOrderByCreateAtDesc(int likes);
 }
