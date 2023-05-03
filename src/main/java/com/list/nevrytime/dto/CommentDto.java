@@ -21,9 +21,10 @@ public class CommentDto {
         private int depth;
         private boolean isDeleted;
         private LocalDateTime createAt;
+        private boolean isShow;
 
         public static CommentResponseDto of(Comment comment) {
-            return new CommentResponseDto(comment.getId(),comment.getMember().getId(), comment.getMember().getNickName(), comment.getCommentContent(), comment.getParentId(), comment.getDepth(), comment.isDeleted(), comment.getCreateAt());
+            return new CommentResponseDto(comment.getId(),comment.getMember().getId(), comment.getMember().getNickName(), comment.getCommentContent(), comment.getParentId(), comment.getDepth(), comment.isDeleted(), comment.getCreateAt(), comment.isShow());
         }
     }
 
@@ -36,6 +37,7 @@ public class CommentDto {
         private String commentContent;
         private Long parentId;
         private int depth;
+        private boolean isShow;
     }
 
     @Getter
@@ -53,5 +55,6 @@ public class CommentDto {
     @NoArgsConstructor
     public static class UpdateCommentRequestDto {
         private String commentContent;
+        private boolean isShow;
     }
 }

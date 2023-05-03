@@ -37,6 +37,7 @@ public class ContentService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
+    private final CommentService commentService;
     private final CommentRepository commentRepository;
 
     @Transactional
@@ -67,29 +68,11 @@ public class ContentService {
     public ContentWithCommentResponseDto findContentById(Long contentId) {
         ContentResponseDto contentResponseDto = ContentResponseDto.of(contentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다.")));
-
-        QComment qComment = new QComment("comment");
-
-        List<CommentResponseDto> commentResponseDtoList = jpaQueryFactory
-                .select(Projections.constructor(
-                        CommentResponseDto.class,
-                        qComment.id.as("id"),
-                        qComment.content.id.as("contentId"),
-                        qComment.member.nickName.as("nickName"),
-                        qComment.commentContent.as("commentContent"),
-                        qComment.parentId.as("parentId"),
-                        qComment.depth.as("depth"),
-                        qComment.isDeleted.as("isDeleted"),
-                        qComment.createAt.as("createAt")
-                ))
-                .from(qComment)
-                .innerJoin(qComment.content)
-                .where(qComment.content.id.eq(contentId))
-                .fetch();
         if (contentResponseDto.isShow() == false) {
             contentResponseDto.setNickName("익명");
         }
-            return new ContentWithCommentResponseDto(contentResponseDto, commentResponseDtoList);
+        List<CommentResponseDto> commentsInContent = commentService.findCommentInContent(contentId);
+        return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent);
     }
 
     @Transactional

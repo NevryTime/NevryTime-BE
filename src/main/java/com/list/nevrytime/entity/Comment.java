@@ -39,6 +39,8 @@ public class Comment {
     private int depth;
     @ColumnDefault("false")
     private boolean isDeleted;
+    @ColumnDefault("true")
+    private boolean isShow;
 
 
     private LocalDateTime createAt;

@@ -3,10 +3,12 @@ package com.list.nevrytime.service;
 import com.list.nevrytime.entity.Comment;
 import com.list.nevrytime.entity.Content;
 import com.list.nevrytime.entity.Member;
+import com.list.nevrytime.entity.QComment;
 import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.CommentRepository;
 import com.list.nevrytime.repository.ContentRepository;
 import com.list.nevrytime.repository.MemberRepository;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.list.nevrytime.dto.CommentDto.*;
 
@@ -45,6 +48,7 @@ public class CommentService {
                 .depth(commentCreateRequestDto.getDepth())
                 .createAt(LocalDateTime.now())
                 .isDeleted(false)
+                .isShow(commentCreateRequestDto.isShow())
                 .build();
 
         content.setCommentCount(content.getCommentCount() + 1);
@@ -93,7 +97,36 @@ public class CommentService {
                 .depth(comment.getDepth())
                 .createAt(LocalDateTime.now())
                 .isDeleted(false)
+                .isShow(updateCommentRequestDto.isShow())
                 .build();
         return commentRepository.save(newComment);
+    }
+
+    public List<CommentResponseDto> findCommentInContent(Long contentId) {
+        QComment qComment = new QComment("comment");
+
+        List<CommentResponseDto> commentResponseDtoList = jpaQueryFactory
+                .select(Projections.constructor(
+                        CommentResponseDto.class,
+                        qComment.id.as("id"),
+                        qComment.content.id.as("contentId"),
+                        qComment.member.nickName.as("nickName"),
+                        qComment.commentContent.as("commentContent"),
+                        qComment.parentId.as("parentId"),
+                        qComment.depth.as("depth"),
+                        qComment.isDeleted.as("isDeleted"),
+                        qComment.createAt.as("createAt"),
+                        qComment.isShow.as("isShow")
+                ))
+                .from(qComment)
+                .innerJoin(qComment.content)
+                .where(qComment.content.id.eq(contentId))
+                .fetch();
+        for (CommentResponseDto commentResponseDto : commentResponseDtoList) {
+            if (!commentResponseDto.isShow()) {
+                commentResponseDto.setNickName("익명");
+            }
+        }
+        return commentResponseDtoList;
     }
 }
