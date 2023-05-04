@@ -5,6 +5,7 @@ import com.list.nevrytime.entity.Content;
 import com.list.nevrytime.entity.Image;
 import lombok.*;
 import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -71,6 +72,8 @@ public class ContentDto {
         private boolean isImage;
         @Nullable
         private boolean isShow;
+
+        private List<MultipartFile> imageFiles;
     }
 
     @Getter
