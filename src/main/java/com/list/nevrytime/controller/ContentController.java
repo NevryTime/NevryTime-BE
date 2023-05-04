@@ -50,7 +50,7 @@ public class ContentController {
         return ResponseEntity.ok(contentService.pageContent(boardId, page, length));
     }
 
-    @PostMapping("/create/{imageFile}")
+    @PostMapping("/create")
     public ResponseEntity<ContentWithImageResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto,@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
