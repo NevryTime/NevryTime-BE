@@ -1,6 +1,7 @@
 package com.list.nevrytime.service;
 
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
+import com.list.nevrytime.dto.ImageDto;
 import com.list.nevrytime.entity.*;
 import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.BoardRepository;
@@ -20,14 +21,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.CommentDto.*;
 import static com.list.nevrytime.dto.ContentDto.*;
+import static com.list.nevrytime.dto.ImageDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +49,8 @@ public class ContentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ContentResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
+    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto, MultipartFile imageFile) throws IOException {
+
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
 
@@ -63,7 +70,26 @@ public class ContentService {
                 .likes(0)
                 .build();
 
-        return ContentResponseDto.of(contentRepository.save(content));
+        Content createdContent = contentRepository.save(content);
+
+
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images";
+
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + imageFile.getOriginalFilename();
+        File saveFile = new File(projectPath, fileName);
+        imageFile.transferTo(saveFile);
+
+        Image image = Image.builder()
+                .content(createdContent)
+                .imageName(fileName)
+                .imagePath("/images/" + fileName)
+                .build();
+
+        ContentResponseDto contentResponseDto = ContentResponseDto.of(createdContent);
+        ImageResponseDto imageResponseDto = ImageResponseDto.of(image);
+
+        return new ContentWithImageResponseDto(contentResponseDto, imageResponseDto);
     }
 
     @Transactional

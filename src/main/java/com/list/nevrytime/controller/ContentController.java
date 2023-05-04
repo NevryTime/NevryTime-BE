@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 import static com.list.nevrytime.dto.ContentDto.*;
 
@@ -47,12 +50,12 @@ public class ContentController {
         return ResponseEntity.ok(contentService.pageContent(boardId, page, length));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ContentResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto) {
+    @PostMapping("/create/{imageFile}")
+    public ResponseEntity<ContentWithImageResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto,@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
         }
-        return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto));
+        return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto, imageFile));
     }
 
     @GetMapping("/popular")

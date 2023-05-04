@@ -2,6 +2,7 @@ package com.list.nevrytime.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.list.nevrytime.entity.Content;
+import com.list.nevrytime.entity.Image;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -50,6 +51,15 @@ public class ContentDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public static class ContentWithImageResponseDto {
+        private ContentResponseDto contentResponseDto;
+        private ImageDto.ImageResponseDto imageResponseDto;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class ContentCreateRequestDto {
 
@@ -65,7 +75,7 @@ public class ContentDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentListResponseDto {
         private boolean success;
         private List<ContentResponseDto> contentList = new ArrayList<>();
@@ -74,7 +84,7 @@ public class ContentDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentDeleteResponseDto {
         private boolean success;
     }
@@ -94,7 +104,7 @@ public class ContentDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentUpdateResponseDto {
 
         private boolean success;
@@ -104,7 +114,7 @@ public class ContentDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentPageResponseDto {
 
         private boolean success;

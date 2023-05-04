@@ -58,6 +58,11 @@ public class Content {
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
     List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
+    List<Image> images = new ArrayList<>();
+
     public void changeBoard(Board board) {
         this.board = board;
         board.getContents().add(this);

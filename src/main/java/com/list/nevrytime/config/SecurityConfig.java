@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -49,6 +51,19 @@ public class SecurityConfig {
                 .antMatchers("/h2-console/**", "/favicon.ico");
     }
 
+    // 이미지를 출력할 때는 spring 에게 해당 경로를 허락해줘야 함
+    @Configuration
+    public class WebMvcConfig implements WebMvcConfigurer {
+
+        // todo: 허락해줄 경로를 설정해줌. 앞에 file:/// 를 붙여줌
+        String PermittedPath = "file:///" + System.getProperty("user.dir") + "/src/main/resources/static/";
+
+        @Override
+        public void addResourceHandlers(ResourceHandlerRegistry registry) {
+            registry.addResourceHandler("/**") // PermittedPath 경로들/+a
+                    .addResourceLocations(PermittedPath); // 로컬에 저장된 파일을 읽어 올 root 경로 설정
+        }
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
