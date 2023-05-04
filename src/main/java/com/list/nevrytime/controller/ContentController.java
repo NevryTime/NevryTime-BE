@@ -54,12 +54,12 @@ public class ContentController {
     @PostMapping("/create")
     public ResponseEntity<ContentWithImageResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal
             , @RequestBody ContentCreateRequestDto contentCreateRequestDto
-//            ,@RequestParam("imageFile") List<MultipartFile> imageFiles
+            , @RequestParam("imageFile") List<MultipartFile> imageFiles
     ) throws IOException, Exception {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
         }
-        return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto, contentCreateRequestDto.getImageFiles()));
+        return ResponseEntity.ok(contentService.createContent(memberPrincipal.getMember().getId(), contentCreateRequestDto, imageFiles));
     }
 
     @GetMapping("/popular")

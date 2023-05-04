@@ -73,7 +73,7 @@ public class ContentDto {
         @Nullable
         private boolean isShow;
 
-        private List<MultipartFile> imageFiles;
+//        private List<MultipartFile> imageFiles;
     }
 
     @Getter
