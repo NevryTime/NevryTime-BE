@@ -1,15 +1,10 @@
 package com.list.nevrytime.service;
 
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
-import com.list.nevrytime.dto.ImageDto;
 import com.list.nevrytime.entity.*;
 import com.list.nevrytime.exception.CustomException;
-import com.list.nevrytime.repository.BoardRepository;
-import com.list.nevrytime.repository.CommentRepository;
-import com.list.nevrytime.repository.ContentRepository;
-import com.list.nevrytime.repository.MemberRepository;
-import com.list.nevrytime.security.jwt.MemberPrincipal;
-import com.list.nevrytime.security.util.SecurityUtil;
+import com.list.nevrytime.files.FileHandler;
+import com.list.nevrytime.repository.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,12 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.CommentDto.*;
@@ -46,10 +39,12 @@ public class ContentService {
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
     private final CommentService commentService;
+    private final FileHandler fileHandler;
+    private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto, MultipartFile imageFile) throws IOException {
+    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto, List<MultipartFile> imageFile) throws IOException, Exception {
 
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
@@ -71,29 +66,29 @@ public class ContentService {
                 .build();
 
         Content createdContent = contentRepository.save(content);
-
-
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images";
-
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + imageFile.getOriginalFilename();
-        File saveFile = new File(projectPath, fileName);
-        imageFile.transferTo(saveFile);
-
-        Image image = Image.builder()
-                .content(createdContent)
-                .imageName(fileName)
-                .imagePath("/images/" + fileName)
-                .build();
-
         ContentResponseDto contentResponseDto = ContentResponseDto.of(createdContent);
-        ImageResponseDto imageResponseDto = ImageResponseDto.of(image);
 
-        return new ContentWithImageResponseDto(contentResponseDto, imageResponseDto);
+        List<Image> list = fileHandler.parseFileInfo(createdContent, imageFile);
+        // 파일이 없을 땐 null 값으로 응답
+        if (list.isEmpty()) {
+            return new ContentWithImageResponseDto(contentResponseDto, null);
+        }
+        // 파일이 있으면 DB에 저장 후 Image 저장한 리스트 반환
+        else {
+            List<Image> pictureBeans = new ArrayList<>();
+            for (Image contentPicture : list) {
+                pictureBeans.add(imageRepository.save(contentPicture));
+            }
+            List<ImageResponseDto> resultList = pictureBeans
+                    .stream()
+                    .map(picture -> modelMapper.map(list, ImageResponseDto.class))
+                    .collect(Collectors.toList());
+            return new ContentWithImageResponseDto(contentResponseDto, resultList);
+        }
     }
 
     @Transactional
-    public ContentWithCommentResponseDto findContentById(Long memberId, Long contentId ) {
+    public ContentWithCommentResponseDto findContentById(Long memberId, Long contentId) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
 

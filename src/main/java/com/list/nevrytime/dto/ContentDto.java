@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.list.nevrytime.dto.CommentDto.*;
+import static com.list.nevrytime.dto.ImageDto.*;
 
 public class ContentDto {
 
@@ -54,7 +55,7 @@ public class ContentDto {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentWithImageResponseDto {
         private ContentResponseDto contentResponseDto;
-        private ImageDto.ImageResponseDto imageResponseDto;
+        private List<ImageResponseDto> imageResponseDtos;
     }
 
     @Getter

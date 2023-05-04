@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 import static com.list.nevrytime.dto.ContentDto.*;
 
@@ -51,7 +52,7 @@ public class ContentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ContentWithImageResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto,@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+    public ResponseEntity<ContentWithImageResponseDto> createContent(@AuthenticationPrincipal MemberPrincipal memberPrincipal, @RequestBody ContentCreateRequestDto contentCreateRequestDto,@RequestParam("imageFile") List<MultipartFile> imageFile) throws IOException, Exception {
         if (memberPrincipal.getMember().getId() == null) {
             throw new CustomException(HttpStatus.UNAUTHORIZED, "인증되지 않은 유저입니다.");
         }
