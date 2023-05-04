@@ -1,7 +1,9 @@
 package com.list.nevrytime.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,6 +18,6 @@ public class WebConfig implements WebMvcConfigurer {
 						HttpMethod.POST.name(),
 						HttpMethod.PUT.name(),
 						HttpMethod.DELETE.name())
-				.allowedHeaders("Origin, X-Requested-With, Content-Type, Accept, Authorization" );
+				.allowedHeaders(HttpHeaders.CONTENT_TYPE);
 	}
 }
