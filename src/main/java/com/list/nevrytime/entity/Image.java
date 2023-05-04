@@ -30,4 +30,7 @@ public class Image {
 
     @Column
     private String imagePath;
+
+    @Column
+    private Long fileSize;
 }
