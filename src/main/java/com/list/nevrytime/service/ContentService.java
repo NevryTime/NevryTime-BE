@@ -9,6 +9,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import static com.list.nevrytime.dto.CommentDto.*;
 import static com.list.nevrytime.dto.ContentDto.*;
 import static com.list.nevrytime.dto.ImageDto.*;
+import static java.awt.SystemColor.info;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +46,7 @@ public class ContentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto, List<MultipartFile> imageFile) throws IOException, Exception {
+    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
 
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
@@ -68,23 +70,7 @@ public class ContentService {
         Content createdContent = contentRepository.save(content);
         ContentResponseDto contentResponseDto = ContentResponseDto.of(createdContent);
 
-        List<Image> list = fileHandler.parseFileInfo(createdContent, imageFile);
-        // 파일이 없을 땐 null 값으로 응답
-        if (list.isEmpty()) {
-            return new ContentWithImageResponseDto(contentResponseDto, null);
-        }
-        // 파일이 있으면 DB에 저장 후 Image 저장한 리스트 반환
-        else {
-            List<Image> pictureBeans = new ArrayList<>();
-            for (Image contentPicture : list) {
-                pictureBeans.add(imageRepository.save(contentPicture));
-            }
-            List<ImageResponseDto> resultList = pictureBeans
-                    .stream()
-                    .map(picture -> modelMapper.map(list, ImageResponseDto.class))
-                    .collect(Collectors.toList());
-            return new ContentWithImageResponseDto(contentResponseDto, resultList);
-        }
+        return new ContentWithImageResponseDto(contentResponseDto, null);
     }
 
     @Transactional
