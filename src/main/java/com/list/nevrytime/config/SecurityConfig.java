@@ -70,8 +70,7 @@ public class SecurityConfig {
         // CSRF 설정 Disable
         http.httpBasic().disable()
                 .csrf().disable()
-                .cors()
-                .and()
+                .cors().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS)
