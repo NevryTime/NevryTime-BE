@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.CommentDto.*;
 import static com.list.nevrytime.dto.ContentDto.*;
+import static com.list.nevrytime.dto.ImageDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +36,7 @@ public class ContentService {
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
     private final CommentService commentService;
-    private final ImageRepository imageRepository;
-    private final CommentRepository commentRepository;
+    private final ImageService imageService;
 
     @Transactional
     public ContentResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
@@ -72,14 +72,18 @@ public class ContentService {
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
 
         ContentResponseDto contentResponseDto = ContentResponseDto.of(content);
+        List<CommentResponseDto> commentsInContent = commentService.findCommentInContent(contentId);
+
         if (contentResponseDto.isShow() == false) {
             contentResponseDto.setNickName("익명");
         }
-        List<CommentResponseDto> commentsInContent = commentService.findCommentInContent(contentId);
-        if (memberId == content.getMember().getId()) {
-            return new DetailContentResponseDto(contentResponseDto, commentsInContent, true);
+
+        if (!content.isImage()) {
+            return new DetailContentResponseDto(contentResponseDto, commentsInContent, null, memberId.equals(content.getMember().getId()));
         }
-        return new DetailContentResponseDto(contentResponseDto, commentsInContent, false);
+
+        List<DownloadImageResponseDto> downloadImageResponseDtos = imageService.downloadImage(contentId);
+        return new DetailContentResponseDto(contentResponseDto, commentsInContent, downloadImageResponseDtos, memberId.equals(content.getMember().getId()));
     }
 
     @Transactional

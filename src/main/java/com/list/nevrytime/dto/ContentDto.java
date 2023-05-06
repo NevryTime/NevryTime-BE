@@ -20,6 +20,7 @@ public class ContentDto {
 
         private ContentResponseDto contentResponseDto;
         private List<CommentResponseDto> commentList;
+        private List<DownloadImageResponseDto> downloadImageResponseDtos;
         private boolean isWriter;
     }
 

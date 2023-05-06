@@ -34,7 +34,8 @@ public class ContentController {
 
     @GetMapping("/{contentId}")
     public ResponseEntity<DetailContentResponseDto> findContentById(@PathVariable Long contentId, @AuthenticationPrincipal MemberPrincipal memberPrincipal) {
-        return ResponseEntity.ok(contentService.findContentById(memberPrincipal.getMember().getId(),contentId));
+        DetailContentResponseDto contentById = contentService.findContentById(memberPrincipal.getMember().getId(), contentId);
+        return ResponseEntity.ok(contentById);
     }
 
     @DeleteMapping("/{contentId}")
