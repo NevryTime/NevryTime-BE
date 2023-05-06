@@ -3,13 +3,11 @@ package com.list.nevrytime.service;
 import com.list.nevrytime.dto.ContentDto.ContentCreateRequestDto;
 import com.list.nevrytime.entity.*;
 import com.list.nevrytime.exception.CustomException;
-import com.list.nevrytime.files.FileHandler;
 import com.list.nevrytime.repository.*;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +23,6 @@ import java.util.stream.Collectors;
 
 import static com.list.nevrytime.dto.CommentDto.*;
 import static com.list.nevrytime.dto.ContentDto.*;
-import static com.list.nevrytime.dto.ImageDto.*;
-import static java.awt.SystemColor.info;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +35,11 @@ public class ContentService {
     private final MemberRepository memberRepository;
     private final ContentRepository contentRepository;
     private final CommentService commentService;
-    private final FileHandler fileHandler;
     private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ContentWithImageResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
+    public ContentResponseDto createContent(Long uid, ContentCreateRequestDto contentCreateRequestDto) {
 
         Board board = boardRepository.findById(contentCreateRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(HttpStatus.BAD_REQUEST, "boardId가 유효하지 않습니다."));
@@ -63,18 +56,18 @@ public class ContentService {
                 .isImage(contentCreateRequestDto.isImage())
                 .isShow(contentCreateRequestDto.isShow())
                 .commentCount(0)
+                .imageCount(0)
                 .scraps(0)
                 .likes(0)
                 .build();
 
         Content createdContent = contentRepository.save(content);
-        ContentResponseDto contentResponseDto = ContentResponseDto.of(createdContent);
 
-        return new ContentWithImageResponseDto(contentResponseDto, null);
+        return ContentResponseDto.of(createdContent);
     }
 
     @Transactional
-    public ContentWithCommentResponseDto findContentById(Long memberId, Long contentId) {
+    public DetailContentResponseDto findContentById(Long memberId, Long contentId) {
         Content content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "게시판이 존재하지 않습니다."));
 
@@ -84,9 +77,9 @@ public class ContentService {
         }
         List<CommentResponseDto> commentsInContent = commentService.findCommentInContent(contentId);
         if (memberId == content.getMember().getId()) {
-            return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent, true);
+            return new DetailContentResponseDto(contentResponseDto, commentsInContent, true);
         }
-        return new ContentWithCommentResponseDto(contentResponseDto, commentsInContent, false);
+        return new DetailContentResponseDto(contentResponseDto, commentsInContent, false);
     }
 
     @Transactional
@@ -120,7 +113,7 @@ public class ContentService {
                     .select(Projections.constructor(
                             ContentResponseDto.class,
                             qContent.id, qContent.board.name, qContent.member.nickName,
-                            qContent.title, qContent.content, qContent.commentCount,
+                            qContent.title, qContent.content, qContent.commentCount,qContent.imageCount,
                             qContent.scraps, qContent.likes, qContent.createAt,
                             qContent.isImage, qContent.isShow))
                     .from(qContent)
@@ -145,7 +138,7 @@ public class ContentService {
                 .select(Projections.constructor(
                         ContentResponseDto.class,
                         qContent.id, qContent.board.name, qContent.member.nickName,
-                        qContent.title, qContent.content, qContent.commentCount,
+                        qContent.title, qContent.content, qContent.commentCount,qContent.imageCount,
                         qContent.scraps, qContent.likes, qContent.createAt,
                         qContent.isImage, qContent.isShow))
                 .from(qContent)
@@ -192,6 +185,7 @@ public class ContentService {
                 .likes(findContent.getLikes())
                 .createAt(LocalDateTime.now())
                 .commentCount(findContent.getCommentCount())
+                .imageCount(findContent.getImageCount())
                 .scraps(findContent.getScraps())
                 .build();
 
@@ -242,7 +236,7 @@ public class ContentService {
 
     private ContentPageResponseDto getContentPageResponseDto(Page<Content> contents) {
         Page<ContentResponseDto> toMap = contents.map(
-                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getNickName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
+                content -> new ContentResponseDto(content.getId(), content.getBoard().getName(), content.getMember().getNickName(), content.getTitle(), content.getContent(), content.getCommentCount(), content.getImageCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow()));
 
         for (ContentResponseDto contentResponseDto : toMap) {
             if (!contentResponseDto.isShow()) {
