@@ -2,13 +2,9 @@ package com.list.nevrytime.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.list.nevrytime.entity.Content;
-import com.list.nevrytime.entity.Image;
 import lombok.*;
-import org.springframework.lang.Nullable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.list.nevrytime.dto.CommentDto.*;
@@ -20,7 +16,7 @@ public class ContentDto {
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ContentWithCommentResponseDto {
+    public static class DetailContentResponseDto {
 
         private ContentResponseDto contentResponseDto;
         private List<CommentResponseDto> commentList;
@@ -39,6 +35,7 @@ public class ContentDto {
         private String title;
         private String content;
         private int commentCount;
+        private int imageCount;
         private int scraps;
         private int likes;
         private LocalDateTime createAt;
@@ -46,7 +43,7 @@ public class ContentDto {
         private boolean isShow;
 
         public static ContentResponseDto of(Content content) {
-            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getNickName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
+            return new ContentResponseDto(content.getId(), content.getBoard().getName(),content.getMember().getNickName(),content.getTitle(),content.getContent(), content.getCommentCount(), content.getImageCount(), content.getScraps(), content.getLikes(), content.getCreateAt(), content.isImage(), content.isShow());
         }
     }
 
@@ -68,12 +65,11 @@ public class ContentDto {
         private String title;
         private String content;
         private Long boardId;
-        @Nullable
+        @NonNull
         private boolean isImage;
-        @Nullable
+        @NonNull
         private boolean isShow;
 
-//        private List<MultipartFile> imageFiles;
     }
 
     @Getter
@@ -82,7 +78,7 @@ public class ContentDto {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class ContentListResponseDto {
         private boolean success;
-        private List<ContentResponseDto> contentList = new ArrayList<>();
+        private List<ContentResponseDto> contentList;
     }
 
     @Getter
