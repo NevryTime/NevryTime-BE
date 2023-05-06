@@ -28,8 +28,11 @@ public class Image {
     @Column
     private String imageName;
 
-    @Column
-    private String imagePath;
+    @Lob
+    @Column(name = "imagedata", length = 1000)
+    private String imageData;
+
+    private String type;
 
     @Column
     private Long fileSize;
