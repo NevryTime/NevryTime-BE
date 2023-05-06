@@ -1,4 +1,4 @@
-package com.list.nevrytime.security.util;
+package com.list.nevrytime.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

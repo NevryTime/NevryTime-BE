@@ -1,17 +1,15 @@
 package com.list.nevrytime.service;
 
 
-import com.list.nevrytime.dto.TokenDto.TokenRequestDto;
 import com.list.nevrytime.entity.Member;
 import com.list.nevrytime.entity.RefreshToken;
 import com.list.nevrytime.exception.CustomException;
 import com.list.nevrytime.repository.MemberRepository;
 import com.list.nevrytime.repository.RefreshTokenRepository;
-import com.list.nevrytime.security.util.SecurityUtil;
+import com.list.nevrytime.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
