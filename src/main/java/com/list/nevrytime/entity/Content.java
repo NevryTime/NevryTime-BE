@@ -45,6 +45,8 @@ public class Content {
     @ColumnDefault("0")
     private int commentCount;
     @ColumnDefault("0")
+    private int imageCount;
+    @ColumnDefault("0")
     private int scraps;
     @ColumnDefault("0")
     private int likes;
