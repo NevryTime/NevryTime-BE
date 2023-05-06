@@ -25,10 +25,10 @@ public class ImageController {
         return imageService.uploadImage(file, imageRequestDto.getContentId());
     }
 
-    // 다운로드
+    //다운로드
     @GetMapping("/{fileId}")
     public ResponseEntity<?> downloadImage(@PathVariable("fileId") Long fileId) {
-        DownloadImageResponseDto downloadImageResponseDto = imageService.downloadImage(fileId);
+        DownloadImageResponseDto downloadImageResponseDto = imageService.testDownloadImage(fileId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf(downloadImageResponseDto.getType()))//"image/png"
                 .body(downloadImageResponseDto.getFile());
